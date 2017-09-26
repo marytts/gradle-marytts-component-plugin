@@ -11,3 +11,18 @@ gradlePlugin {
         }
     }
 }
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'org.testng', name: 'testng', version: '6.9.13'
+}
+
+test {
+    useTestNG()
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}

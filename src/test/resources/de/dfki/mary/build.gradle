@@ -1,0 +1,9 @@
+plugins {
+    id 'de.dfki.mary.component'
+}
+
+task testPlugin {
+    doLast {
+        assert pluginManager.hasPlugin('de.dfki.mary.component')
+    }
+}
