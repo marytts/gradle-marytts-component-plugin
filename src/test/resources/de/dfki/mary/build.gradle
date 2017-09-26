@@ -15,3 +15,17 @@ task testGenerateSource {
         assert fileTree(generateSource.destDir).include('**/*.groovy').files
     }
 }
+
+task testCompileGroovy {
+    dependsOn compileGroovy
+    doLast {
+        assert fileTree(sourceSets.main.groovy.outputDir).include('**/*.class').files
+    }
+}
+
+task testCompileTestGroovy {
+    dependsOn compileTestGroovy
+    doLast {
+        assert fileTree(sourceSets.test.groovy.outputDir).include('**/*.class').files
+    }
+}

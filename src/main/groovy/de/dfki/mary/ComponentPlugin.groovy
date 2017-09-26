@@ -10,6 +10,30 @@ class ComponentPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.pluginManager.apply GroovyPlugin
 
+        project.repositories {
+            jcenter()
+        }
+
+        project.dependencies {
+            compile localGroovy()
+            compile group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
+                exclude module: 'groovy-all'
+            }
+        }
+
         project.tasks.maybeCreate('generateSource', GenerateSource)
+
+        project.sourceSets {
+            main {
+                groovy {
+                    srcDirs += "$project.generateSource.destDir/main/groovy"
+                }
+            }
+            test {
+                groovy {
+                    srcDirs += "$project.generateSource.destDir/test/groovy"
+                }
+            }
+        }
     }
 }

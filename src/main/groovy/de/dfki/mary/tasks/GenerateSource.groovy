@@ -18,7 +18,27 @@ class GenerateSource extends DefaultTask {
                         'Config.groovy'(
                                 """|package marytts
                                    |
+                                   |import marytts.config.MaryConfig
+                                   |
                                    |class Config extends MaryConfig {
+                                   |}
+                                   |""".stripMargin()
+                        )
+                    }
+                }
+            }
+            test {
+                groovy {
+                    marytts {
+                        'ConfigTest.groovy'(
+                                """|package marytts
+                                   |
+                                   |class ConfigTest {
+                                   |    @Test
+                                   |    public void isNotMainConfig() {
+                                   |        def config = new Config()
+                                   |        assert m.isMainConfig() == false
+                                   |    }
                                    |}
                                    |""".stripMargin()
                         )
