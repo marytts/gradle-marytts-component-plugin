@@ -2,8 +2,9 @@ plugins {
     id 'de.dfki.mary.component'
 }
 
-task testPlugin {
+task testPlugins {
     doLast {
         assert pluginManager.hasPlugin('de.dfki.mary.component')
+        assert pluginManager.hasPlugin('groovy')
     }
 }
