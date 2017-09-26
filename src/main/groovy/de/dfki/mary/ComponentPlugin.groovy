@@ -19,6 +19,7 @@ class ComponentPlugin implements Plugin<Project> {
             compile group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
                 exclude module: 'groovy-all'
             }
+            testCompile group: 'org.testng', name: 'testng', version: '6.9.13'
         }
 
         project.tasks.maybeCreate('generateSource', GenerateSource)
@@ -33,6 +34,13 @@ class ComponentPlugin implements Plugin<Project> {
                 groovy {
                     srcDirs += "$project.generateSource.destDir/test/groovy"
                 }
+            }
+        }
+
+        project.test {
+            useTestNG()
+            testLogging {
+                exceptionFormat = 'full'
             }
         }
     }

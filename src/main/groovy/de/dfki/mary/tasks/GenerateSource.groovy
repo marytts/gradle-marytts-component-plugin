@@ -21,6 +21,10 @@ class GenerateSource extends DefaultTask {
                                    |import marytts.config.MaryConfig
                                    |
                                    |class Config extends MaryConfig {
+                                   |
+                                   |  Config() {
+                                   |    super()
+                                   |  }
                                    |}
                                    |""".stripMargin()
                         )
@@ -33,7 +37,10 @@ class GenerateSource extends DefaultTask {
                         'ConfigTest.groovy'(
                                 """|package marytts
                                    |
+                                   |import org.testng.annotations.Test
+                                   |
                                    |class ConfigTest {
+                                   |
                                    |    @Test
                                    |    public void isNotMainConfig() {
                                    |        def config = new Config()
