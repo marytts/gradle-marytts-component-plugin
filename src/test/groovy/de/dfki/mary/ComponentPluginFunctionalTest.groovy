@@ -23,7 +23,8 @@ class ComponentPluginFunctionalTest {
         // task name to run, and whether to chase it with a test task named "testName"
         [
                 ['help', false],
-                ['testPlugins', false]
+                ['testPlugins', false],
+                ['generateSource', true]
         ]
     }
 
