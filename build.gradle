@@ -1,0 +1,13 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'groovy'
+}
+
+gradlePlugin {
+    plugins {
+        componentPlugin {
+            id = 'de.dfki.mary.component'
+            implementationClass = 'de.dfki.mary.ComponentPlugin'
+        }
+    }
+}
