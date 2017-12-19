@@ -26,6 +26,8 @@ class ComponentPluginFunctionalTest {
                 ['testPlugins', false],
                 ['testExtension', false],
                 ['generateSource', true],
+                ['generateConfig', true],
+                ['processResources', true],
                 ['compileGroovy', true],
                 ['compileTestGroovy', true],
                 ['test', false]

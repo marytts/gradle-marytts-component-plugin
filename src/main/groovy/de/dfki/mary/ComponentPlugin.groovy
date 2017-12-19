@@ -43,7 +43,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.processResources {
             from project.generateConfig, {
-                rename { "marytts/$it" }
+                rename { "$project.marytts.component.packageName/$it" }
             }
         }
 
