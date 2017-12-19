@@ -10,7 +10,7 @@ class ComponentPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.pluginManager.apply GroovyPlugin
 
-        project.extensions.create('marytts', MaryttsExtension)
+        project.extensions.create('marytts', MaryttsExtension, project)
 
         project.repositories {
             jcenter()
