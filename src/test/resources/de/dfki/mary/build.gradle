@@ -2,10 +2,24 @@ plugins {
     id 'de.dfki.mary.component'
 }
 
+marytts {
+    component {
+        name = 'Hello'
+        packageName = 'world'
+    }
+}
+
 task testPlugins {
     doLast {
         assert pluginManager.hasPlugin('de.dfki.mary.component')
         assert pluginManager.hasPlugin('groovy')
+    }
+}
+
+task testExtension {
+    doLast {
+        assert marytts.component.name == 'Hello'
+        assert marytts.component.packageName == 'world'
     }
 }
 
