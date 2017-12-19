@@ -1,6 +1,6 @@
 package de.dfki.mary
 
-import de.dfki.mary.tasks.GenerateSource
+import de.dfki.mary.tasks.*
 import org.gradle.api.*
 import org.gradle.api.plugins.GroovyPlugin
 
@@ -24,6 +24,8 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.tasks.create('generateSource', GenerateSource)
 
+        project.tasks.create('generateConfig', GenerateConfig)
+
         project.sourceSets {
             main {
                 groovy {
@@ -34,6 +36,12 @@ class ComponentPlugin implements Plugin<Project> {
                 groovy {
                     srcDirs += "${project.generateSource.destDir.get()}/test/groovy"
                 }
+            }
+        }
+
+        project.processResources {
+            from project.generateConfig, {
+                rename { "marytts/$it" }
             }
         }
 
