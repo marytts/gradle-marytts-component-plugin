@@ -22,9 +22,9 @@ class GenerateSource extends DefaultTask {
                                    |
                                    |class Config extends MaryConfig {
                                    |
-                                   |  Config() {
-                                   |    super()
-                                   |  }
+                                   |    Config() {
+                                   |        super(Config.class.getResourceAsStream('hello.config'))
+                                   |    }
                                    |}
                                    |""".stripMargin()
                         )
@@ -44,7 +44,7 @@ class GenerateSource extends DefaultTask {
                                    |    @Test
                                    |    public void isNotMainConfig() {
                                    |        def config = new Config()
-                                   |        assert m.isMainConfig() == false
+                                   |        assert config.isMainConfig() == false
                                    |    }
                                    |}
                                    |""".stripMargin()
