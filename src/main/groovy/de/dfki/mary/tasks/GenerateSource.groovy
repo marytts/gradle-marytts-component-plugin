@@ -1,16 +1,22 @@
 package de.dfki.mary.tasks
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.Directory
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
 
 class GenerateSource extends DefaultTask {
 
     @OutputDirectory
-    File destDir = project.file("$project.buildDir/generatedSource")
+    Provider<Directory> destDir = newOutputDirectory()
+
+    GenerateSource() {
+        destDir = project.layout.buildDirectory.dir('generatedSrc')
+    }
 
     @TaskAction
     void generate() {
-        def tree = new FileTreeBuilder(destDir)
+        def tree = new FileTreeBuilder(destDir.get().asFile)
         tree {
             main {
                 groovy {

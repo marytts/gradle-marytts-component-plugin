@@ -22,17 +22,17 @@ class ComponentPlugin implements Plugin<Project> {
             testCompile group: 'org.testng', name: 'testng', version: '6.9.13'
         }
 
-        project.tasks.maybeCreate('generateSource', GenerateSource)
+        project.tasks.create('generateSource', GenerateSource)
 
         project.sourceSets {
             main {
                 groovy {
-                    srcDirs += "$project.generateSource.destDir/main/groovy"
+                    srcDirs += "${project.generateSource.destDir.get()}/main/groovy"
                 }
             }
             test {
                 groovy {
-                    srcDirs += "$project.generateSource.destDir/test/groovy"
+                    srcDirs += "${project.generateSource.destDir.get()}/test/groovy"
                 }
             }
         }
