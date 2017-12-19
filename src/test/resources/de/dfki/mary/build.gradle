@@ -2,10 +2,13 @@ plugins {
     id 'de.dfki.mary.component'
 }
 
+def componentName = 'Hello'
+def componentPackageName = 'world'
+
 marytts {
     component {
-        name = 'Hello'
-        packageName = 'world'
+        name = componentName
+        packageName = componentPackageName
     }
 }
 
@@ -18,8 +21,8 @@ task testPlugins {
 
 task testExtension {
     doLast {
-        assert marytts.component.name == 'Hello'
-        assert marytts.component.packageName == 'world'
+        assert marytts.component.name == componentName
+        assert marytts.component.packageName == componentPackageName
     }
 }
 
