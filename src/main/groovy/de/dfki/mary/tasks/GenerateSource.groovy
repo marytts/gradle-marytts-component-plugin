@@ -21,15 +21,15 @@ class GenerateSource extends DefaultTask {
             main {
                 groovy {
                     marytts {
-                        'Config.groovy'(
+                        "${project.marytts.component.name}Config.groovy"(
                                 """|package marytts
                                    |
                                    |import marytts.config.MaryConfig
                                    |
-                                   |class Config extends MaryConfig {
+                                   |class ${project.marytts.component.name}Config extends MaryConfig {
                                    |
-                                   |    Config() {
-                                   |        super(Config.class.getResourceAsStream('hello.config'))
+                                   |    ${project.marytts.component.name}Config() {
+                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('hello.config'))
                                    |    }
                                    |}
                                    |""".stripMargin()
@@ -40,16 +40,16 @@ class GenerateSource extends DefaultTask {
             test {
                 groovy {
                     marytts {
-                        'ConfigTest.groovy'(
+                        "${project.marytts.component.name}ConfigTest.groovy"(
                                 """|package marytts
                                    |
                                    |import org.testng.annotations.Test
                                    |
-                                   |class ConfigTest {
+                                   |class ${project.marytts.component.name}ConfigTest {
                                    |
                                    |    @Test
                                    |    public void isNotMainConfig() {
-                                   |        def config = new Config()
+                                   |        def config = new ${project.marytts.component.name}Config()
                                    |        assert config.isMainConfig() == false
                                    |    }
                                    |}

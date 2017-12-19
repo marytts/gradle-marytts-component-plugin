@@ -29,20 +29,21 @@ task testExtension {
 task testGenerateSource {
     dependsOn generateSource
     doLast {
-        assert fileTree(generateSource.destDir).include('**/*.groovy').files
+        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/marytts/${componentName}Config.groovy"))
+        assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/marytts/${componentName}ConfigTest.groovy"))
     }
 }
 
 task testCompileGroovy {
     dependsOn compileGroovy
     doLast {
-        assert fileTree(sourceSets.main.groovy.outputDir).include('**/*.class').files
+        assert fileTree(sourceSets.main.groovy.outputDir).contains(file("$buildDir/classes/groovy/main/marytts/${componentName}Config.class"))
     }
 }
 
 task testCompileTestGroovy {
     dependsOn compileTestGroovy
     doLast {
-        assert fileTree(sourceSets.test.groovy.outputDir).include('**/*.class').files
+        assert fileTree(sourceSets.test.groovy.outputDir).contains(file("$buildDir/classes/groovy/test/marytts/${componentName}ConfigTest.class"))
     }
 }
