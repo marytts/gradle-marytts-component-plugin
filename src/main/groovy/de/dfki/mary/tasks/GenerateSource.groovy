@@ -20,9 +20,9 @@ class GenerateSource extends DefaultTask {
         tree {
             main {
                 groovy {
-                    marytts {
+                    "$project.marytts.component.packageName" {
                         "${project.marytts.component.name}Config.groovy"(
-                                """|package marytts
+                                """|package $project.marytts.component.packageName
                                    |
                                    |import marytts.config.MaryConfig
                                    |
@@ -31,7 +31,7 @@ class GenerateSource extends DefaultTask {
                                    |    ${project.marytts.component.name}Config() {
                                    |        super(${
                                     project.marytts.component.name
-                                }Config.class.getResourceAsStream('/$project.marytts.component.packageName/hello.config'))
+                                }Config.class.getResourceAsStream('hello.config'))
                                    |    }
                                    |}
                                    |""".stripMargin()
@@ -41,9 +41,9 @@ class GenerateSource extends DefaultTask {
             }
             test {
                 groovy {
-                    marytts {
+                    "$project.marytts.component.packageName" {
                         "${project.marytts.component.name}ConfigTest.groovy"(
-                                """|package marytts
+                                """|package $project.marytts.component.packageName
                                    |
                                    |import org.testng.annotations.Test
                                    |

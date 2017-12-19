@@ -29,8 +29,8 @@ task testExtension {
 task testGenerateSource {
     dependsOn generateSource
     doLast {
-        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/marytts/${componentName}Config.groovy"))
-        assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/marytts/${componentName}ConfigTest.groovy"))
+        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/$componentPackageName/${componentName}Config.groovy"))
+        assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/$componentPackageName/${componentName}ConfigTest.groovy"))
     }
 }
 
@@ -51,13 +51,13 @@ task testProcessResources {
 task testCompileGroovy {
     dependsOn compileGroovy
     doLast {
-        assert fileTree(sourceSets.main.groovy.outputDir).contains(file("$buildDir/classes/groovy/main/marytts/${componentName}Config.class"))
+        assert fileTree(sourceSets.main.groovy.outputDir).contains(file("$buildDir/classes/groovy/main/$componentPackageName/${componentName}Config.class"))
     }
 }
 
 task testCompileTestGroovy {
     dependsOn compileTestGroovy
     doLast {
-        assert fileTree(sourceSets.test.groovy.outputDir).contains(file("$buildDir/classes/groovy/test/marytts/${componentName}ConfigTest.class"))
+        assert fileTree(sourceSets.test.groovy.outputDir).contains(file("$buildDir/classes/groovy/test/$componentPackageName/${componentName}ConfigTest.class"))
     }
 }
