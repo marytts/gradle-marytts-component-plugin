@@ -70,6 +70,9 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.processResources {
+            from project.generateServiceLoader, {
+                rename { 'META-INF/services/marytts.config.MaryConfig' }
+            }
             from project.generateConfig, {
                 rename { "$project.marytts.component.packageName/$it" }
             }
