@@ -24,9 +24,7 @@ class GenerateSource extends DefaultTask {
                                    |class ${project.marytts.component.name}Config extends MaryConfig {
                                    |
                                    |    ${project.marytts.component.name}Config() {
-                                   |        super(${
-                                    project.marytts.component.name
-                                }Config.class.getResourceAsStream('hello.config'))
+                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('hello.config'))
                                    |    }
                                    |}
                                    |""".stripMargin()
@@ -40,14 +38,56 @@ class GenerateSource extends DefaultTask {
                         "${project.marytts.component.name}ConfigTest.groovy"(
                                 """|package $project.marytts.component.packageName
                                    |
-                                   |import org.testng.annotations.Test
+                                   |import org.testng.annotations.*
                                    |
                                    |class ${project.marytts.component.name}ConfigTest {
                                    |
+                                   |    ${project.marytts.component.name}Config config
+                                   |
+                                   |    @BeforeMethod
+                                   |    void setup() {
+                                   |        config = new ${project.marytts.component.name}Config()
+                                   |    }
+                                   |
                                    |    @Test
                                    |    public void isNotMainConfig() {
-                                   |        def config = new ${project.marytts.component.name}Config()
                                    |        assert config.isMainConfig() == false
+                                   |    }
+                                   |
+                                   |    @Test
+                                   |    public void canGetProperty() {
+                                   |        assert config.properties.hello == 'World'
+                                   |    }
+                                   |}
+                                   |""".stripMargin()
+                        )
+                    }
+                }
+            }
+            integrationTest {
+                groovy {
+                    "$project.marytts.component.packageName" {
+                        "Load${project.marytts.component.name}IT.groovy"(
+                                """|package $project.marytts.component.packageName
+                                   |
+                                   |import marytts.config.MaryConfig
+                                   |import marytts.server.MaryProperties
+                                   |import marytts.util.MaryRuntimeUtils
+                                   |
+                                   |import org.testng.annotations.*
+                                   |
+                                   |class Load${project.marytts.component.name}IT {
+                                   |
+                                   |    @BeforeMethod
+                                   |    void setup() {
+                                   |        MaryRuntimeUtils.ensureMaryStarted()
+                                   |    }
+                                   |
+                                   |    @Test
+                                   |    public void canGetProperty() {
+                                   |        def expected = 'World'
+                                   |        def actual = MaryProperties.getProperty('hello')
+                                   |        assert expected == actual
                                    |    }
                                    |}
                                    |""".stripMargin()

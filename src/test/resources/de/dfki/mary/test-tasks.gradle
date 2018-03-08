@@ -17,6 +17,7 @@ task testGenerateSource {
     doLast {
         assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/$componentPackageName/${componentName}Config.groovy"))
         assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/$componentPackageName/${componentName}ConfigTest.groovy"))
+        assert sourceSets.integrationTest.allSource.contains(file("$buildDir/generatedSrc/integrationTest/groovy/$componentPackageName/Load${componentName}IT.groovy"))
     }
 }
 
