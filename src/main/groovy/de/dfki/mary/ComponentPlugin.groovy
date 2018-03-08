@@ -16,6 +16,20 @@ class ComponentPlugin implements Plugin<Project> {
             jcenter()
         }
 
+        project.sourceSets {
+            integrationTest {
+                java {
+                    compileClasspath += main.output + test.output
+                    runtimeClasspath += main.output + test.output
+                }
+            }
+        }
+
+        project.configurations {
+            integrationTestCompile.extendsFrom testCompile
+            integrationTestRuntime.extendsFrom testRuntime
+        }
+
         project.dependencies {
             compile localGroovy()
             compile group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
@@ -41,6 +55,11 @@ class ComponentPlugin implements Plugin<Project> {
             test {
                 groovy {
                     srcDirs += "${project.generateSource.destDir.get()}/test/groovy"
+                }
+            }
+            integrationTest {
+                groovy {
+                    srcDirs += "${project.generateSource.destDir.get()}/integrationTest/groovy"
                 }
             }
         }
