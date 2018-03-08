@@ -7,11 +7,7 @@ import org.gradle.api.tasks.*
 class GenerateConfig extends DefaultTask {
 
     @OutputFile
-    RegularFileProperty destFile = newOutputFile()
-
-    GenerateConfig() {
-        destFile.set(project.layout.buildDirectory.file("hello.config"))
-    }
+    final RegularFileProperty destFile = newOutputFile()
 
     @TaskAction
     void generate() {

@@ -1,18 +1,13 @@
 package de.dfki.mary.tasks
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.Directory
-import org.gradle.api.provider.Provider
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.*
 
 class GenerateSource extends DefaultTask {
 
     @OutputDirectory
-    Provider<Directory> destDir = newOutputDirectory()
-
-    GenerateSource() {
-        destDir = project.layout.buildDirectory.dir('generatedSrc')
-    }
+    final DirectoryProperty destDir = newOutputDirectory()
 
     @TaskAction
     void generate() {

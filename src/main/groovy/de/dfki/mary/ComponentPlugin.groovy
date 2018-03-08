@@ -24,9 +24,13 @@ class ComponentPlugin implements Plugin<Project> {
             testCompile group: 'org.testng', name: 'testng', version: '6.9.13'
         }
 
-        project.tasks.create('generateSource', GenerateSource)
+        project.tasks.create('generateSource', GenerateSource) {
+            destDir = project.layout.buildDirectory.dir('generatedSrc')
+        }
 
-        project.tasks.create('generateConfig', GenerateConfig)
+        project.tasks.create('generateConfig', GenerateConfig) {
+            destFile = project.layout.buildDirectory.file("hello.config")
+        }
 
         project.sourceSets {
             main {
