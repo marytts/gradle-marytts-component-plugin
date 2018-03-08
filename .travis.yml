@@ -1,0 +1,20 @@
+branches:
+  only:
+    - master
+
+language: groovy
+jdk:
+  - openjdk7
+  - openjdk8
+  - oraclejdk8
+
+before_install:
+  - JAVA_HOME=$(jdk_switcher home openjdk8) ./gradlew
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
