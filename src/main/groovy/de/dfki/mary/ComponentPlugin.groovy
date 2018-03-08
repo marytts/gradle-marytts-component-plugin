@@ -3,6 +3,7 @@ package de.dfki.mary
 import de.dfki.mary.tasks.*
 import org.gradle.api.*
 import org.gradle.api.plugins.GroovyPlugin
+import org.gradle.api.tasks.testing.Test
 
 class ComponentPlugin implements Plugin<Project> {
 
@@ -75,6 +76,18 @@ class ComponentPlugin implements Plugin<Project> {
             testLogging {
                 exceptionFormat = 'full'
             }
+        }
+
+        project.task('integrationTest', type: Test) {
+            useTestNG()
+            workingDir = project.buildDir
+            testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
+            classpath = project.sourceSets.integrationTest.runtimeClasspath
+            systemProperty 'log4j.logger.marytts', 'INFO,stderr'
+            testLogging.showStandardStreams = true
+            reports.html.destination = project.file("$project.reporting.baseDir/$name")
+            project.check.dependsOn it
+            mustRunAfter project.test
         }
     }
 }

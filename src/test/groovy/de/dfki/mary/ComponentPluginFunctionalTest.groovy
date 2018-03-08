@@ -43,7 +43,8 @@ class ComponentPluginFunctionalTest {
                 ['processResources', true],
                 ['compileGroovy', true],
                 ['compileTestGroovy', true],
-                ['test', false]
+                ['test', false],
+                ['integrationTest', false]
         ]
     }
 
