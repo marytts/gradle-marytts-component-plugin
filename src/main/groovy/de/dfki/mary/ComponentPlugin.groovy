@@ -39,6 +39,10 @@ class ComponentPlugin implements Plugin<Project> {
             testCompile group: 'org.testng', name: 'testng', version: '6.9.13'
         }
 
+        project.tasks.create('generateServiceLoader', GenerateServiceLoader) {
+            destFile = project.layout.buildDirectory.file('serviceLoader.txt')
+        }
+
         project.tasks.create('generateSource', GenerateSource) {
             destDir = project.layout.buildDirectory.dir('generatedSrc')
         }

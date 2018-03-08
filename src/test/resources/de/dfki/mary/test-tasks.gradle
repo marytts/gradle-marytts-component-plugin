@@ -12,6 +12,14 @@ task testExtension {
     }
 }
 
+task testGenerateServiceLoader {
+    dependsOn generateServiceLoader
+    doLast {
+        assert file("$buildDir/serviceLoader.txt").exists()
+        assert file("$buildDir/serviceLoader.txt").text == "${componentPackageName}.${componentName}Config"
+    }
+}
+
 task testGenerateSource {
     dependsOn generateSource
     doLast {
