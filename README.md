@@ -1,0 +1,1 @@
+# gradle-marytts-component-plugin
