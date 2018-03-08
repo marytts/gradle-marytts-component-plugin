@@ -1,0 +1,10 @@
+plugins {
+    id 'de.dfki.mary.component'
+}
+
+ext {
+    componentName = 'MyComponent'
+    componentPackageName = 'mypackage'
+}
+
+apply from: 'test-tasks.gradle'

@@ -1,0 +1,17 @@
+plugins {
+    id 'de.dfki.mary.component'
+}
+
+ext {
+    componentName = 'Hello'
+    componentPackageName = 'world'
+}
+
+marytts {
+    component {
+        name = componentName
+        packageName = componentPackageName
+    }
+}
+
+apply from: 'test-tasks.gradle'

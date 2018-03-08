@@ -26,10 +26,10 @@ class ComponentData {
     }
 
     String getName() {
-        name.get()
+        name.getOrElse('MyComponent')
     }
 
     String getPackageName() {
-        packageName.get()
+        packageName.getOrElse('mypackage')
     }
 }

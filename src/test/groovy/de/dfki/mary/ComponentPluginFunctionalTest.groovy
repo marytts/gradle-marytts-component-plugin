@@ -9,12 +9,25 @@ class ComponentPluginFunctionalTest {
 
     GradleRunner gradle
 
-    @BeforeSuite
-    void setup() {
+    @BeforeGroups(groups = 'default')
+    void setupDefault() {
         def projectDir = File.createTempDir()
         gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath()
-        new File(projectDir, 'build.gradle').withWriter {
-            it << this.class.getResourceAsStream('build.gradle')
+        ['build-with-defaults.gradle', 'test-tasks.gradle'].each { resourceName ->
+            new File(projectDir, resourceName).withWriter {
+                it << this.class.getResourceAsStream(resourceName)
+            }
+        }
+    }
+
+    @BeforeGroups(groups = 'custom')
+    void setupCustom() {
+        def projectDir = File.createTempDir()
+        gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath()
+        ['customized-build.gradle', 'test-tasks.gradle'].each { resourceName ->
+            new File(projectDir, resourceName).withWriter {
+                it << this.class.getResourceAsStream(resourceName)
+            }
         }
     }
 
@@ -34,14 +47,28 @@ class ComponentPluginFunctionalTest {
         ]
     }
 
-    @Test(dataProvider = 'taskNames')
-    void testTasks(String taskName, boolean runTestTask) {
-        def result = gradle.withArguments(taskName).build()
+    @Test(groups = 'default', dataProvider = 'taskNames')
+    void defaultBuildTestTasks(String taskName, boolean runTestTask) {
+        def result = gradle.withArguments('--build-file', 'build-with-defaults.gradle', taskName).build()
         println result.output
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
             def testTaskName = 'test' + taskName.capitalize()
-            result = gradle.withArguments(testTaskName).build()
+            result = gradle.withArguments('--build-file', 'build-with-defaults.gradle', testTaskName).build()
+            println result.output
+            assert result.task(":$taskName").outcome == UP_TO_DATE
+            assert result.task(":$testTaskName").outcome == SUCCESS
+        }
+    }
+
+    @Test(groups = 'custom', dataProvider = 'taskNames')
+    void customBuildTestTasks(String taskName, boolean runTestTask) {
+        def result = gradle.withArguments('--build-file', 'customized-build.gradle', taskName).build()
+        println result.output
+        assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
+        if (runTestTask) {
+            def testTaskName = 'test' + taskName.capitalize()
+            result = gradle.withArguments('--build-file', 'customized-build.gradle', testTaskName).build()
             println result.output
             assert result.task(":$taskName").outcome == UP_TO_DATE
             assert result.task(":$testTaskName").outcome == SUCCESS

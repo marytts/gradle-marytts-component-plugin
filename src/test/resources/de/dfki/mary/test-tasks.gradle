@@ -1,17 +1,3 @@
-plugins {
-    id 'de.dfki.mary.component'
-}
-
-def componentName = 'Hello'
-def componentPackageName = 'world'
-
-marytts {
-    component {
-        name = componentName
-        packageName = componentPackageName
-    }
-}
-
 task testPlugins {
     doLast {
         assert pluginManager.hasPlugin('de.dfki.mary.component')
