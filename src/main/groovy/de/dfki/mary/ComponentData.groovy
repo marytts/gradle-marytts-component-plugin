@@ -11,25 +11,36 @@ class ComponentData {
 
     Property<String> packageName
 
+    Property<Map> config
+
     ComponentData(Project project) {
         this.project = project
         name = project.objects.property(String)
         packageName = project.objects.property(String)
+        config = project.objects.property(Map)
+    }
+
+    String getName() {
+        this.name.getOrElse('MyComponent')
     }
 
     void setName(String name) {
         this.name.set(name)
     }
 
+    String getPackageName() {
+        this.packageName.getOrElse('mypackage')
+    }
+
     void setPackageName(String packageName) {
         this.packageName.set(packageName)
     }
 
-    String getName() {
-        name.getOrElse('MyComponent')
+    Map getConfig() {
+        this.config.getOrElse([:])
     }
 
-    String getPackageName() {
-        packageName.getOrElse('mypackage')
+    void setConfig(Map config) {
+        this.config.set(config)
     }
 }
