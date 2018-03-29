@@ -19,6 +19,12 @@ apply from: 'test-tasks.gradle'
 
 task testConfig {
     doLast {
-        assert marytts.component.config != [:]
+        def expected = [
+                'foo.bar'  : 'foo baz',
+                'foo.qux'  : ['quux', 'quuux'],
+                'foo.fnord': 'jar:/path/to/the/fnord'
+        ]
+        def actual = marytts.component.config
+        assert expected == actual
     }
 }
