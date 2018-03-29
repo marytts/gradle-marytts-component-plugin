@@ -88,10 +88,20 @@ class GenerateSource extends DefaultTask {
                                    |        MaryRuntimeUtils.ensureMaryStarted()
                                    |    }
                                    |
-                                   |    @Test
-                                   |    public void canGetProperty() {
-                                   |        def expected = 'World'
-                                   |        def actual = MaryProperties.getProperty('hello')
+                                   |    @DataProvider
+                                   |    Object[][] properties() {
+                                   |        [
+                                   |""".stripMargin() +
+                                        project.marytts.component.config.collect { name, value ->
+                                            "            ['$name', '$value']"
+                                        }.join(',\n') +
+                                        """|
+                                   |        ]
+                                   |    }
+                                   |
+                                   |    @Test(dataProvider = 'properties')
+                                   |    public void canGetProperty(name, expected) {
+                                   |        def actual = MaryProperties.getProperty(name)
                                    |        assert expected == actual
                                    |    }
                                    |}
