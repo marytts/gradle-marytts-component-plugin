@@ -103,6 +103,9 @@ class GenerateSource extends DefaultTask {
                                    |    public void canGetProperty(name, expected) {
                                    |        def actual = MaryProperties.getProperty(name)
                                    |        assert expected == actual
+                                   |        if (expected.startsWith('jar:')) {
+                                   |            assert MaryProperties.getStream(name)
+                                   |        }
                                    |    }
                                    |}
                                    |""".stripMargin()

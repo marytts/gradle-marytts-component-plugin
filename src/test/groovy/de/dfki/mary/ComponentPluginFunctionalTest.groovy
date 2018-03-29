@@ -29,6 +29,9 @@ class ComponentPluginFunctionalTest {
                 it << this.class.getResourceAsStream(resourceName)
             }
         }
+        def resourceParent = new File(projectDir, 'src/main/resources/path/to/the')
+        resourceParent.mkdirs()
+        new File(resourceParent, 'fnord').createNewFile()
     }
 
     @DataProvider
