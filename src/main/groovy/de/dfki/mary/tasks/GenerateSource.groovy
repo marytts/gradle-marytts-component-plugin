@@ -56,8 +56,12 @@ class GenerateSource extends DefaultTask {
                                    |    }
                                    |
                                    |    @Test
-                                   |    public void canGetProperty() {
-                                   |        assert config.properties.hello == 'World'
+                                   |    public void canGetProperties() {
+                                   |""".stripMargin() +
+                                        project.marytts.component.config.collect { name, value ->
+                                            "        assert config.properties.'$name' == '$value'"
+                                        }.join('\n') +
+                                        """|
                                    |    }
                                    |}
                                    |""".stripMargin()
