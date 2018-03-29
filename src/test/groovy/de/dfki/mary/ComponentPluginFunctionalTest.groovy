@@ -38,6 +38,7 @@ class ComponentPluginFunctionalTest {
                 ['help', false],
                 ['testPlugins', false],
                 ['testExtension', false],
+                ['testConfig', false],
                 ['generateServiceLoader', true],
                 ['generateSource', true],
                 ['generateConfig', true],
