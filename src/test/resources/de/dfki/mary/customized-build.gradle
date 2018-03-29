@@ -28,3 +28,14 @@ task testConfig {
         assert expected == actual
     }
 }
+
+testGenerateConfig {
+    doLast {
+        def expected = '''foo.bar = foo baz
+                         |foo.qux = [quux, quuux]
+                         |foo.fnord = jar:/path/to/the/fnord
+                         |'''.stripMargin()
+        def actual = generateConfig.destFile.get().asFile.text
+        assert expected == actual
+    }
+}
