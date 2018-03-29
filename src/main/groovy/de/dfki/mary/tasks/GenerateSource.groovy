@@ -11,6 +11,7 @@ class GenerateSource extends DefaultTask {
 
     @TaskAction
     void generate() {
+        project.delete destDir.asFileTree
         def tree = new FileTreeBuilder(destDir.get().asFile)
         tree {
             main {
