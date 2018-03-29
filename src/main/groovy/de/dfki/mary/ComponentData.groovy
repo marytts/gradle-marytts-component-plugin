@@ -1,7 +1,9 @@
 package de.dfki.mary
 
+import org.gradle.api.InvalidUserDataException
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
+import org.yaml.snakeyaml.Yaml
 
 class ComponentData {
 
@@ -42,5 +44,24 @@ class ComponentData {
 
     void setConfig(Map config) {
         this.config.set(config)
+    }
+
+    void config(args) {
+        switch (args.getClass()) {
+            case Map:
+                def config = new ConfigObject()
+                def configFile
+                try {
+                    configFile = project.file(args.from)
+                } catch (ex) {
+                    throw new InvalidUserDataException("Must supply a 'from:' argument with a readable YAML file", ex)
+                }
+                config << new Yaml().load(configFile.newReader('UTF-8'))
+                setConfig config.flatten()
+                break
+            default:
+                throw new InvalidUserDataException("Could not load component configurations from marytts.component.config")
+                break
+        }
     }
 }
