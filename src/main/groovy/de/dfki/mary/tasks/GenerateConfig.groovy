@@ -12,7 +12,9 @@ class GenerateConfig extends DefaultTask {
     @TaskAction
     void generate() {
         destFile.get().asFile.withWriter { config ->
-            config.println "hello = World"
+            project.marytts.component.config.each { key, value ->
+                config.println "$key = $value"
+            }
         }
     }
 }
