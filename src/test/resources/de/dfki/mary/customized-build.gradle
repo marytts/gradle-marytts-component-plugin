@@ -11,6 +11,7 @@ marytts {
     component {
         name = componentName
         packageName = componentPackageName
+        config from: 'config.yaml'
     }
 }
 

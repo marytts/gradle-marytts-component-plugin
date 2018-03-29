@@ -24,7 +24,7 @@ class ComponentPluginFunctionalTest {
     void setupCustom() {
         def projectDir = File.createTempDir()
         gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath()
-        ['customized-build.gradle', 'test-tasks.gradle'].each { resourceName ->
+        ['customized-build.gradle', 'test-tasks.gradle', 'config.yaml'].each { resourceName ->
             new File(projectDir, resourceName).withWriter {
                 it << this.class.getResourceAsStream(resourceName)
             }
