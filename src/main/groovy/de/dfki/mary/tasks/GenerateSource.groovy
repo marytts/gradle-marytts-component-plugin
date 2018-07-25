@@ -11,6 +11,7 @@ class GenerateSource extends DefaultTask {
 
     @TaskAction
     void generate() {
+        project.delete destDir.asFileTree
         def tree = new FileTreeBuilder(destDir.get().asFile)
         tree {
             main {
@@ -55,8 +56,16 @@ class GenerateSource extends DefaultTask {
                                    |    }
                                    |
                                    |    @Test
-                                   |    public void canGetProperty() {
-                                   |        assert config.properties.hello == 'World'
+                                   |    public void canGetProperties() {
+                                   |""".stripMargin() +
+                                        project.marytts.component.config.collect { name, value ->
+                                            if (value instanceof List) {
+                                                return "        assert config.properties.'${name}.list' == '" + value.join(' ') + "'"
+                                            } else {
+                                                return "        assert config.properties.'$name' == '$value'"
+                                            }
+                                        }.join('\n') +
+                                        """|
                                    |    }
                                    |}
                                    |""".stripMargin()
@@ -83,11 +92,36 @@ class GenerateSource extends DefaultTask {
                                    |        MaryRuntimeUtils.ensureMaryStarted()
                                    |    }
                                    |
-                                   |    @Test
-                                   |    public void canGetProperty() {
-                                   |        def expected = 'World'
-                                   |        def actual = MaryProperties.getProperty('hello')
+                                   |    @DataProvider
+                                   |    Object[][] properties() {
+                                   |        [
+                                   |""".stripMargin() +
+                                        project.marytts.component.config.collect { name, value ->
+                                            if (value instanceof List) {
+                                                return "            ['${name}.list', $value]"
+                                            } else {
+                                                return "            ['$name', '$value']"
+                                            }
+                                        }.join(',\n') +
+                                        """|
+                                   |        ]
+                                   |    }
+                                   |
+                                   |    @Test(dataProvider = 'properties')
+                                   |    public void canGetProperty(name, expected) {
+                                   |        def actual
+                                   |        switch (name) {
+                                   |            case ~/.+\\.list\$/:
+                                   |                actual = MaryProperties.getList(name)
+                                   |                break
+                                   |            default:
+                                   |                actual = MaryProperties.getProperty(name)
+                                   |                break
+                                   |        }
                                    |        assert expected == actual
+                                   |        if (expected.startsWith('jar:')) {
+                                   |            assert MaryProperties.getStream(name)
+                                   |        }
                                    |    }
                                    |}
                                    |""".stripMargin()

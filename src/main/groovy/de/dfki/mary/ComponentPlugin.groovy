@@ -34,7 +34,7 @@ class ComponentPlugin implements Plugin<Project> {
         project.dependencies {
             compile localGroovy()
             compile group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
-                exclude module: 'groovy-all'
+                exclude group: '*', module: 'groovy-all'
             }
             testCompile group: 'org.testng', name: 'testng', version: '6.9.13'
         }

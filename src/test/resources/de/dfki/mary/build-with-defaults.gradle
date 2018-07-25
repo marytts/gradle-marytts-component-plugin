@@ -8,3 +8,9 @@ ext {
 }
 
 apply from: 'test-tasks.gradle'
+
+task testConfig {
+    doLast {
+        assert marytts.component.config == [:]
+    }
+}

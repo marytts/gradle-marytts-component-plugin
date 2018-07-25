@@ -24,11 +24,14 @@ class ComponentPluginFunctionalTest {
     void setupCustom() {
         def projectDir = File.createTempDir()
         gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath()
-        ['customized-build.gradle', 'test-tasks.gradle'].each { resourceName ->
+        ['customized-build.gradle', 'test-tasks.gradle', 'config.yaml'].each { resourceName ->
             new File(projectDir, resourceName).withWriter {
                 it << this.class.getResourceAsStream(resourceName)
             }
         }
+        def resourceParent = new File(projectDir, 'src/main/resources/path/to/the')
+        resourceParent.mkdirs()
+        new File(resourceParent, 'fnord').createNewFile()
     }
 
     @DataProvider
@@ -38,6 +41,7 @@ class ComponentPluginFunctionalTest {
                 ['help', false],
                 ['testPlugins', false],
                 ['testExtension', false],
+                ['testConfig', false],
                 ['generateServiceLoader', true],
                 ['generateSource', true],
                 ['generateConfig', true],

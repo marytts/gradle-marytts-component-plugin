@@ -1,0 +1,11 @@
+# some random nested config for testing
+foo:
+  bar: foo baz
+
+  # this should become a list:
+  qux:
+    - quux
+    - quuux
+
+  # the 'jar:' prefix must be preserved without escaping:
+  fnord: 'jar:/path/to/the/fnord'

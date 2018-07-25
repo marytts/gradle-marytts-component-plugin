@@ -11,7 +11,33 @@ marytts {
     component {
         name = componentName
         packageName = componentPackageName
+        config from: 'config.yaml'
     }
 }
 
 apply from: 'test-tasks.gradle'
+
+task testConfig {
+    doLast {
+        def expected = [
+                'foo.bar'  : 'foo baz',
+                'foo.qux'  : ['quux', 'quuux'],
+                'foo.fnord': 'jar:/path/to/the/fnord'
+        ]
+        def actual = marytts.component.config
+        assert expected == actual
+    }
+}
+
+testGenerateConfig {
+    doLast {
+        def expected = '''foo.bar = foo baz
+                         |foo.qux.list = \\
+                         |    quux \\
+                         |    quuux
+                         |foo.fnord = jar:/path/to/the/fnord
+                         |'''.stripMargin()
+        def actual = generateConfig.destFile.get().asFile.text
+        assert expected == actual
+    }
+}
