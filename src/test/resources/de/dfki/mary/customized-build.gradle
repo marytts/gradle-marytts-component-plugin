@@ -32,7 +32,9 @@ task testConfig {
 testGenerateConfig {
     doLast {
         def expected = '''foo.bar = foo baz
-                         |foo.qux = [quux, quuux]
+                         |foo.qux.list = \\
+                         |    quux \\
+                         |    quuux
                          |foo.fnord = jar:/path/to/the/fnord
                          |'''.stripMargin()
         def actual = generateConfig.destFile.get().asFile.text

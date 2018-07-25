@@ -59,7 +59,11 @@ class GenerateSource extends DefaultTask {
                                    |    public void canGetProperties() {
                                    |""".stripMargin() +
                                         project.marytts.component.config.collect { name, value ->
-                                            "        assert config.properties.'$name' == '$value'"
+                                            if (value instanceof List) {
+                                                return "        assert config.properties.'${name}.list' == '" + value.join(' ') + "'"
+                                            } else {
+                                                return "        assert config.properties.'$name' == '$value'"
+                                            }
                                         }.join('\n') +
                                         """|
                                    |    }
@@ -93,7 +97,11 @@ class GenerateSource extends DefaultTask {
                                    |        [
                                    |""".stripMargin() +
                                         project.marytts.component.config.collect { name, value ->
-                                            "            ['$name', '$value']"
+                                            if (value instanceof List) {
+                                                return "            ['${name}.list', $value]"
+                                            } else {
+                                                return "            ['$name', '$value']"
+                                            }
                                         }.join(',\n') +
                                         """|
                                    |        ]
@@ -101,7 +109,15 @@ class GenerateSource extends DefaultTask {
                                    |
                                    |    @Test(dataProvider = 'properties')
                                    |    public void canGetProperty(name, expected) {
-                                   |        def actual = MaryProperties.getProperty(name)
+                                   |        def actual
+                                   |        switch (name) {
+                                   |            case ~/.+\\.list\$/:
+                                   |                actual = MaryProperties.getList(name)
+                                   |                break
+                                   |            default:
+                                   |                actual = MaryProperties.getProperty(name)
+                                   |                break
+                                   |        }
                                    |        assert expected == actual
                                    |        if (expected.startsWith('jar:')) {
                                    |            assert MaryProperties.getStream(name)

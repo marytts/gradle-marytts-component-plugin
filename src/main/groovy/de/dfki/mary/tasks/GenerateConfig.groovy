@@ -13,7 +13,12 @@ class GenerateConfig extends DefaultTask {
     void generate() {
         destFile.get().asFile.withWriter { config ->
             project.marytts.component.config.each { key, value ->
-                config.println "$key = $value"
+                if (value instanceof List) {
+                    config.println "${key}.list = \\"
+                    config.println value.collect { "    $it" }.join(' \\\n')
+                } else {
+                    config.println "$key = $value"
+                }
             }
         }
     }
