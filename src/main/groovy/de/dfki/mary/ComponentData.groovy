@@ -38,6 +38,10 @@ class ComponentData {
         this.packageName.set(packageName)
     }
 
+    String getPackagePath() {
+        getPackageName().replaceAll('\\.', '/')
+    }
+
     Map getConfig() {
         this.config.getOrElse([:])
     }

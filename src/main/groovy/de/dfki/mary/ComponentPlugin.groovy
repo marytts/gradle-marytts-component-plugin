@@ -74,7 +74,7 @@ class ComponentPlugin implements Plugin<Project> {
                 rename { 'META-INF/services/marytts.config.MaryConfig' }
             }
             from project.generateConfig, {
-                rename { "$project.marytts.component.packageName/$it" }
+                rename { "$project.marytts.component.packagePath/$it" }
             }
         }
 
