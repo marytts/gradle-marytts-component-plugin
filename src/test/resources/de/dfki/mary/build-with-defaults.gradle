@@ -5,6 +5,7 @@ plugins {
 ext {
     componentName = 'MyComponent'
     componentPackageName = 'mypackage'
+    componentPackagePath = componentPackageName.replaceAll('\\.', '/')
 }
 
 apply from: 'test-tasks.gradle'

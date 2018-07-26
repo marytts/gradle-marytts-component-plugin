@@ -5,6 +5,7 @@ plugins {
 ext {
     componentName = 'Hello'
     componentPackageName = 'my.world'
+    componentPackagePath = componentPackageName.replaceAll('\\.', '/')
 }
 
 marytts {
