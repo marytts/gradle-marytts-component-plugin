@@ -78,6 +78,10 @@ class ComponentPlugin implements Plugin<Project> {
             }
         }
 
+        project.compileGroovy {
+            dependsOn project.generateSource
+        }
+
         project.test {
             useTestNG()
             testLogging {

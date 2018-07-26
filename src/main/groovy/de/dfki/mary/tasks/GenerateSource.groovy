@@ -60,7 +60,7 @@ class GenerateSource extends DefaultTask {
                                    |""".stripMargin() +
                                         project.marytts.component.config.collect { name, value ->
                                             if (value instanceof List) {
-                                                return "        assert config.properties.'${name}.list' == '" + value.join(' ') + "'"
+                                                return "        assert config.properties.'${name}.list'.tokenize().containsAll(${value.collect { '\'' + it + '\'' }})"
                                             } else {
                                                 return "        assert config.properties.'$name' == '$value'"
                                             }
@@ -98,7 +98,7 @@ class GenerateSource extends DefaultTask {
                                    |""".stripMargin() +
                                         project.marytts.component.config.collect { name, value ->
                                             if (value instanceof List) {
-                                                return "            ['${name}.list', $value]"
+                                                return "            ['${name}.list', ${value.collect { '\'' + it + '\'' }}]"
                                             } else {
                                                 return "            ['$name', '$value']"
                                             }
@@ -113,13 +113,14 @@ class GenerateSource extends DefaultTask {
                                    |        switch (name) {
                                    |            case ~/.+\\.list\$/:
                                    |                actual = MaryProperties.getList(name)
+                                   |                assert actual.containsAll(expected)
                                    |                break
                                    |            default:
                                    |                actual = MaryProperties.getProperty(name)
+                                   |                assert expected == actual
                                    |                break
                                    |        }
-                                   |        assert expected == actual
-                                   |        if (expected.startsWith('jar:')) {
+                                   |        if ("\$expected".startsWith('jar:')) {
                                    |            assert MaryProperties.getStream(name)
                                    |        }
                                    |    }
