@@ -4,7 +4,7 @@ plugins {
 
 ext {
     componentName = 'Hello'
-    componentPackageName = 'world'
+    componentPackageName = 'my.world'
 }
 
 marytts {
