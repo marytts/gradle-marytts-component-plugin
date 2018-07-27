@@ -13,6 +13,7 @@ marytts {
     component {
         name = componentName
         packageName = componentPackageName
+        configBaseClass = 'LanguageConfig'
         config from: 'config.yaml'
     }
 }
@@ -22,6 +23,7 @@ apply from: 'test-tasks.gradle'
 task testConfig {
     doLast {
         def expected = [
+                locale     : 'xy',
                 'foo.bar'  : 'foo baz',
                 'foo.qux'  : ['quux', 'quuux'],
                 'foo.fnord': 'jar:/path/to/the/fnord'
@@ -33,7 +35,8 @@ task testConfig {
 
 testGenerateConfig {
     doLast {
-        def expected = '''foo.bar = foo baz
+        def expected = '''locale = xy
+                         |foo.bar = foo baz
                          |foo.qux.list = \\
                          |    quux \\
                          |    quuux

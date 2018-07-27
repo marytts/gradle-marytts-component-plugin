@@ -1,3 +1,6 @@
+# locale for "language"
+locale: xy
+
 # some random nested config for testing
 foo:
   bar: foo baz
