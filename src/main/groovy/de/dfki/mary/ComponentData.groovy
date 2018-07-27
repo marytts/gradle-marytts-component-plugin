@@ -15,11 +15,14 @@ class ComponentData {
 
     Property<Map> config
 
+    Property<String> configBaseClass
+
     ComponentData(Project project) {
         this.project = project
         name = project.objects.property(String)
         packageName = project.objects.property(String)
         config = project.objects.property(Map)
+        configBaseClass = project.objects.property(String)
     }
 
     String getName() {
@@ -48,6 +51,14 @@ class ComponentData {
 
     void setConfig(Map config) {
         this.config.set(config)
+    }
+
+    String getConfigBaseClass() {
+        this.configBaseClass.getOrElse('MaryConfig')
+    }
+
+    void setConfigBaseClass(String configBaseClass) {
+        this.configBaseClass.set(configBaseClass)
     }
 
     void config(args) {

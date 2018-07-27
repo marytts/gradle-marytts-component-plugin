@@ -20,9 +20,9 @@ class GenerateSource extends DefaultTask {
                         "${project.marytts.component.name}Config.groovy"(
                                 """|package $project.marytts.component.packageName
                                    |
-                                   |import marytts.config.MaryConfig
+                                   |import marytts.config.*
                                    |
-                                   |class ${project.marytts.component.name}Config extends MaryConfig {
+                                   |class ${project.marytts.component.name}Config extends $project.marytts.component.configBaseClass {
                                    |
                                    |    ${project.marytts.component.name}Config() {
                                    |        super(${project.marytts.component.name}Config.class.getResourceAsStream('${project.marytts.component.name.toLowerCase()}.config'))
@@ -39,6 +39,7 @@ class GenerateSource extends DefaultTask {
                         "${project.marytts.component.name}ConfigTest.groovy"(
                                 """|package $project.marytts.component.packageName
                                    |
+                                   |import marytts.config.*
                                    |import org.testng.annotations.*
                                    |
                                    |class ${project.marytts.component.name}ConfigTest {
@@ -53,6 +54,11 @@ class GenerateSource extends DefaultTask {
                                    |    @Test
                                    |    public void isNotMainConfig() {
                                    |        assert config.isMainConfig() == false
+                                   |    }
+                                   |
+                                   |    @Test
+                                   |    public void testConfigBaseClass() {
+                                   |        assert config instanceof $project.marytts.component.configBaseClass
                                    |    }
                                    |
                                    |    @Test
@@ -79,7 +85,6 @@ class GenerateSource extends DefaultTask {
                         "Load${project.marytts.component.name}IT.groovy"(
                                 """|package $project.marytts.component.packageName
                                    |
-                                   |import marytts.config.MaryConfig
                                    |import marytts.server.MaryProperties
                                    |import marytts.util.MaryRuntimeUtils
                                    |
