@@ -23,36 +23,36 @@ task testGenerateServiceLoader {
 task testGenerateSource {
     dependsOn generateSource
     doLast {
-        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/$componentPackageName/${componentName}Config.groovy"))
-        assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/$componentPackageName/${componentName}ConfigTest.groovy"))
-        assert sourceSets.integrationTest.allSource.contains(file("$buildDir/generatedSrc/integrationTest/groovy/$componentPackageName/Load${componentName}IT.groovy"))
+        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/$componentPackagePath/${componentName}Config.groovy"))
+        assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/$componentPackagePath/${componentName}ConfigTest.groovy"))
+        assert sourceSets.integrationTest.allSource.contains(file("$buildDir/generatedSrc/integrationTest/groovy/$componentPackagePath/Load${componentName}IT.groovy"))
     }
 }
 
 task testGenerateConfig {
     dependsOn generateConfig
     doLast {
-        assert file("$buildDir/hello.config").exists()
+        assert file("$buildDir/generated.config").exists()
     }
 }
 
 task testProcessResources {
     dependsOn processResources
     doLast {
-        assert fileTree(sourceSets.main.output.resourcesDir).contains(file("$buildDir/resources/main/$componentPackageName/hello.config"))
+        assert fileTree(sourceSets.main.output.resourcesDir).contains(file("$buildDir/resources/main/$componentPackagePath/$configFileName"))
     }
 }
 
 task testCompileGroovy {
     dependsOn compileGroovy
     doLast {
-        assert fileTree(sourceSets.main.groovy.outputDir).contains(file("$buildDir/classes/groovy/main/$componentPackageName/${componentName}Config.class"))
+        assert fileTree(sourceSets.main.groovy.outputDir).contains(file("$buildDir/classes/groovy/main/$componentPackagePath/${componentName}Config.class"))
     }
 }
 
 task testCompileTestGroovy {
     dependsOn compileTestGroovy
     doLast {
-        assert fileTree(sourceSets.test.groovy.outputDir).contains(file("$buildDir/classes/groovy/test/$componentPackageName/${componentName}ConfigTest.class"))
+        assert fileTree(sourceSets.test.groovy.outputDir).contains(file("$buildDir/classes/groovy/test/$componentPackagePath/${componentName}ConfigTest.class"))
     }
 }

@@ -4,7 +4,9 @@ plugins {
 
 ext {
     componentName = 'Hello'
-    componentPackageName = 'world'
+    componentPackageName = 'my.world'
+    componentPackagePath = componentPackageName.replaceAll('\\.', '/')
+    configFileName = 'hello.config'
 }
 
 marytts {

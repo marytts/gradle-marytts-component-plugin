@@ -48,7 +48,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.create('generateConfig', GenerateConfig) {
-            destFile = project.layout.buildDirectory.file("hello.config")
+            destFile = project.layout.buildDirectory.file('generated.config')
         }
 
         project.sourceSets {
@@ -74,7 +74,9 @@ class ComponentPlugin implements Plugin<Project> {
                 rename { 'META-INF/services/marytts.config.MaryConfig' }
             }
             from project.generateConfig, {
-                rename { "$project.marytts.component.packageName/$it" }
+                rename {
+                    "$project.marytts.component.packagePath/${project.marytts.component.name.toLowerCase()}.config"
+                }
             }
         }
 

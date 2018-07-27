@@ -5,6 +5,8 @@ plugins {
 ext {
     componentName = 'MyComponent'
     componentPackageName = 'mypackage'
+    componentPackagePath = componentPackageName.replaceAll('\\.', '/')
+    configFileName = 'mycomponent.config'
 }
 
 apply from: 'test-tasks.gradle'

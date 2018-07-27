@@ -16,7 +16,7 @@ class GenerateSource extends DefaultTask {
         tree {
             main {
                 groovy {
-                    "$project.marytts.component.packageName" {
+                    "$project.marytts.component.packagePath" {
                         "${project.marytts.component.name}Config.groovy"(
                                 """|package $project.marytts.component.packageName
                                    |
@@ -25,7 +25,7 @@ class GenerateSource extends DefaultTask {
                                    |class ${project.marytts.component.name}Config extends MaryConfig {
                                    |
                                    |    ${project.marytts.component.name}Config() {
-                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('hello.config'))
+                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('${project.marytts.component.name.toLowerCase()}.config'))
                                    |    }
                                    |}
                                    |""".stripMargin()
@@ -35,7 +35,7 @@ class GenerateSource extends DefaultTask {
             }
             test {
                 groovy {
-                    "$project.marytts.component.packageName" {
+                    "$project.marytts.component.packagePath" {
                         "${project.marytts.component.name}ConfigTest.groovy"(
                                 """|package $project.marytts.component.packageName
                                    |
@@ -75,7 +75,7 @@ class GenerateSource extends DefaultTask {
             }
             integrationTest {
                 groovy {
-                    "$project.marytts.component.packageName" {
+                    "$project.marytts.component.packagePath" {
                         "Load${project.marytts.component.name}IT.groovy"(
                                 """|package $project.marytts.component.packageName
                                    |
