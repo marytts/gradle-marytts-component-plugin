@@ -25,7 +25,7 @@ class GenerateSource extends DefaultTask {
                                    |class ${project.marytts.component.name}Config extends MaryConfig {
                                    |
                                    |    ${project.marytts.component.name}Config() {
-                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('hello.config'))
+                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('${project.marytts.component.name.toLowerCase()}.config'))
                                    |    }
                                    |}
                                    |""".stripMargin()
