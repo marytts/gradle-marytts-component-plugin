@@ -32,14 +32,14 @@ task testGenerateSource {
 task testGenerateConfig {
     dependsOn generateConfig
     doLast {
-        assert file("$buildDir/hello.config").exists()
+        assert file("$buildDir/generated.config").exists()
     }
 }
 
 task testProcessResources {
     dependsOn processResources
     doLast {
-        assert fileTree(sourceSets.main.output.resourcesDir).contains(file("$buildDir/resources/main/$componentPackagePath/hello.config"))
+        assert fileTree(sourceSets.main.output.resourcesDir).contains(file("$buildDir/resources/main/$componentPackagePath/$configFileName"))
     }
 }
 
