@@ -22,10 +22,14 @@ class GenerateSource extends DefaultTask {
                                    |
                                    |import marytts.config.*
                                    |
-                                   |class ${project.marytts.component.name}Config extends $project.marytts.component.configBaseClass {
+                                   |class ${
+                                    project.marytts.component.name
+                                }Config extends $project.marytts.component.configBaseClass {
                                    |
                                    |    ${project.marytts.component.name}Config() {
-                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('${project.marytts.component.name.toLowerCase()}.config'))
+                                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('${
+                                    project.marytts.component.name.toLowerCase()
+                                }.config'))
                                    |    }
                                    |}
                                    |""".stripMargin()
@@ -101,7 +105,9 @@ class GenerateSource extends DefaultTask {
                                    |    Object[][] properties() {
                                    |        [
                                    |""".stripMargin() +
-                                        project.marytts.component.config.collect { name, value ->
+                                        project.marytts.component.config.findAll {
+                                            it.key != 'locale'
+                                        }.collect { name, value ->
                                             if (value instanceof List) {
                                                 return "            ['${name}.list', ${value.collect { '\'' + it + '\'' }}]"
                                             } else {
