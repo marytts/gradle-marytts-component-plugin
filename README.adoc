@@ -1,5 +1,13 @@
 image:https://travis-ci.org/psibre/gradle-marytts-component-plugin.svg?branch=master["Build Status", link="https://travis-ci.org/psibre/gradle-marytts-component-plugin"]
 
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
 = gradle-marytts-component-plugin
 :toc:
 
