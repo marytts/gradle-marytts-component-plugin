@@ -49,7 +49,8 @@ class ComponentPluginFunctionalTest {
                 ['compileGroovy', true],
                 ['compileTestGroovy', true],
                 ['test', false],
-                ['integrationTest', false]
+                ['integrationTest', false],
+                ['check', true]
         ]
     }
 
@@ -69,12 +70,12 @@ class ComponentPluginFunctionalTest {
 
     @Test(groups = 'custom', dataProvider = 'taskNames')
     void customBuildTestTasks(String taskName, boolean runTestTask) {
-        def result = gradle.withArguments('--info', '--build-file', 'customized-build.gradle', taskName).build()
+        def result = gradle.withArguments('--build-file', 'customized-build.gradle', taskName).build()
         println result.output
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
             def testTaskName = 'test' + taskName.capitalize()
-            result = gradle.withArguments('--info', '--build-file', 'customized-build.gradle', testTaskName).build()
+            result = gradle.withArguments('--build-file', 'customized-build.gradle', testTaskName).build()
             println result.output
             assert result.task(":$taskName").outcome == UP_TO_DATE
             assert result.task(":$testTaskName").outcome == SUCCESS

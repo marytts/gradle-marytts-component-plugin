@@ -56,3 +56,10 @@ task testCompileTestGroovy {
         assert fileTree(sourceSets.test.groovy.outputDir).contains(file("$buildDir/classes/groovy/test/$componentPackagePath/${componentName}ConfigTest.class"))
     }
 }
+
+task testCheck {
+    dependsOn check
+    doLast {
+        assert fileTree(testReportDir).include('**/index.html').files.size() == 3
+    }
+}
