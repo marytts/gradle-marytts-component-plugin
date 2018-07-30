@@ -85,21 +85,20 @@ class ComponentPlugin implements Plugin<Project> {
             dependsOn project.tasks.named('generateSource')
         }
 
-        project.test {
-            useTestNG()
-            testLogging {
-                exceptionFormat = 'full'
-            }
-        }
-
         project.tasks.register 'integrationTest', Test, {
-            useTestNG()
             workingDir = project.buildDir
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
             classpath = project.sourceSets.integrationTest.runtimeClasspath
             systemProperty 'log4j.logger.marytts', 'INFO,stderr'
             testLogging.showStandardStreams = true
             mustRunAfter project.tasks.named('test')
+        }
+
+        project.tasks.withType(Test) {
+            useTestNG()
+            testLogging {
+                exceptionFormat = 'full'
+            }
         }
 
         project.tasks.register 'testReports', TestReport, {
