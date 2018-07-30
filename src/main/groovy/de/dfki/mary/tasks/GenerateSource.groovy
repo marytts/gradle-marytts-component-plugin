@@ -106,7 +106,7 @@ class GenerateSource extends DefaultTask {
                                    |        [
                                    |""".stripMargin() +
                                         project.marytts.component.config.findAll {
-                                            it.key != 'locale'
+                                            !(it.key in ['locale', 'name'])
                                         }.collect { name, value ->
                                             if (value instanceof List) {
                                                 return "            ['${name}.list', ${value.collect { '\'' + it + '\'' }}]"
