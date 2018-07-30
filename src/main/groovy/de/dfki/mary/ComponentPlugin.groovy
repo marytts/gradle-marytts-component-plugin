@@ -4,6 +4,7 @@ import de.dfki.mary.tasks.*
 import org.gradle.api.*
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.TestReport
 
 class ComponentPlugin implements Plugin<Project> {
 
@@ -98,12 +99,16 @@ class ComponentPlugin implements Plugin<Project> {
             classpath = project.sourceSets.integrationTest.runtimeClasspath
             systemProperty 'log4j.logger.marytts', 'INFO,stderr'
             testLogging.showStandardStreams = true
-            reports.html.destination = project.file("$project.reporting.baseDir/$name")
             mustRunAfter project.tasks.named('test')
         }
 
+        project.tasks.register 'testReports', TestReport, {
+            reportOn project.tasks.withType(Test)
+            destinationDir = project.file("$project.testReportDir/all")
+        }
+
         project.tasks.named('check').configure {
-            dependsOn project.tasks.withType(Test)
+            dependsOn project.tasks.named('testReports')
         }
     }
 }
