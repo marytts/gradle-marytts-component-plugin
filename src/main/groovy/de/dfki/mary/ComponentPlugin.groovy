@@ -11,7 +11,7 @@ class ComponentPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.pluginManager.apply GroovyPlugin
 
-        project.extensions.create('marytts', MaryttsExtension, project)
+        project.extensions.create 'marytts', MaryttsExtension, project
 
         project.repositories {
             jcenter()
@@ -39,15 +39,15 @@ class ComponentPlugin implements Plugin<Project> {
             testCompile group: 'org.testng', name: 'testng', version: '6.9.13'
         }
 
-        project.tasks.create('generateServiceLoader', GenerateServiceLoader) {
+        project.tasks.register 'generateServiceLoader', GenerateServiceLoader, {
             destFile = project.layout.buildDirectory.file('serviceLoader.txt')
         }
 
-        project.tasks.create('generateSource', GenerateSource) {
+        project.tasks.register 'generateSource', GenerateSource, {
             destDir = project.layout.buildDirectory.dir('generatedSrc')
         }
 
-        project.tasks.create('generateConfig', GenerateConfig) {
+        project.tasks.register 'generateConfig', GenerateConfig, {
             destFile = project.layout.buildDirectory.file('generated.config')
         }
 
@@ -70,10 +70,10 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.processResources {
-            from project.generateServiceLoader, {
+            from project.tasks.named('generateServiceLoader'), {
                 rename { 'META-INF/services/marytts.config.MaryConfig' }
             }
-            from project.generateConfig, {
+            from project.tasks.named('generateConfig'), {
                 rename {
                     "$project.marytts.component.packagePath/${project.marytts.component.name.toLowerCase()}.config"
                 }
@@ -81,7 +81,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.compileGroovy {
-            dependsOn project.generateSource
+            dependsOn project.tasks.named('generateSource')
         }
 
         project.test {
@@ -91,7 +91,7 @@ class ComponentPlugin implements Plugin<Project> {
             }
         }
 
-        project.task('integrationTest', type: Test) {
+        project.tasks.register 'integrationTest', Test, {
             useTestNG()
             workingDir = project.buildDir
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
@@ -99,8 +99,11 @@ class ComponentPlugin implements Plugin<Project> {
             systemProperty 'log4j.logger.marytts', 'INFO,stderr'
             testLogging.showStandardStreams = true
             reports.html.destination = project.file("$project.reporting.baseDir/$name")
-            project.check.dependsOn it
-            mustRunAfter project.test
+            mustRunAfter project.tasks.named('test')
+        }
+
+        project.tasks.named('check').configure {
+            dependsOn project.tasks.withType(Test)
         }
     }
 }
