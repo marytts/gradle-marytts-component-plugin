@@ -1,4 +1,4 @@
-image:https://travis-ci.org/psibre/gradle-marytts-component-plugin.svg?branch=master["Build Status", link="https://travis-ci.org/psibre/gradle-marytts-component-plugin"]
+image:https://travis-ci.org/marytts/gradle-marytts-component-plugin.svg?branch=master["Build Status", link="https://travis-ci.org/marytts/gradle-marytts-component-plugin"]
 image:https://img.shields.io/badge/License-LGPL%20v3-blue.svg["License: LGPL v3",link="https://www.gnu.org/licenses/lgpl-3.0"]
 
 ifdef::env-github[]
