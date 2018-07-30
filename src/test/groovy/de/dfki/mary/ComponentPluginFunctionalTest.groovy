@@ -49,7 +49,8 @@ class ComponentPluginFunctionalTest {
                 ['compileGroovy', true],
                 ['compileTestGroovy', true],
                 ['test', false],
-                ['integrationTest', false]
+                ['integrationTest', false],
+                ['check', true]
         ]
     }
 
