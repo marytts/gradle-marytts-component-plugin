@@ -1,10 +1,12 @@
 plugins {
     id 'java-gradle-plugin'
     id 'groovy'
+    id 'com.gradle.plugin-publish' version '0.10.0'
 }
 
 group 'de.dfki.mary'
 version '0.1-SNAPSHOT'
+description 'Utility plugin to build MaryTTS components with Gradle'
 
 gradlePlugin {
     plugins {
@@ -29,5 +31,19 @@ test {
     failFast = true
     testLogging {
         exceptionFormat = 'full'
+    }
+}
+
+pluginBundle {
+    def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
+    website = url
+    vcsUrl = url
+    description = project.description
+    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
+
+    plugins {
+        componentPlugin {
+            displayName = 'Gradle MaryTTS Component Plugin'
+        }
     }
 }
