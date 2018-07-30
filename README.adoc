@@ -15,6 +15,10 @@ endif::[]
 
 Utility plugin to build http://mary.dfki.de/[MaryTTS] components with https://gradle.org/[Gradle].
 
+== Plugin Usage
+
+See https://plugins.gradle.org/plugin/de.dfki.mary.component
+
 == Plugin configuration
 
 This plugin adds a `marytts.component` extension, which is configured like this:
