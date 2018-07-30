@@ -9,9 +9,11 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-= gradle-marytts-component-plugin
+= Gradle MaryTTS Component Plugin
 :toc:
 :toc-placement!:
+
+Utility plugin to build http://mary.dfki.de/[MaryTTS] components with https://gradle.org/[Gradle].
 
 == Plugin configuration
 
