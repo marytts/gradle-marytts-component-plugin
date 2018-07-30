@@ -10,6 +10,7 @@ endif::[]
 
 = gradle-marytts-component-plugin
 :toc:
+:toc-placement!:
 
 == Plugin configuration
 
@@ -19,8 +20,8 @@ This plugin adds a `marytts.component` extension, which is configured like this:
 ----
 marytts {
     component {
-        name = 'Fnord' # <1>
-        packageName = 'fnord.stuff' # <2>
+        name = 'Fnord' // <1>
+        packageName = 'fnord.stuff' // <2>
     }
 }
 ----
@@ -59,7 +60,7 @@ Since many MaryTTS components require detailed configuration, the configuration 
 ----
 marytts {
     component {
-        config from: 'config.yaml' # <1>
+        config from: 'config.yaml' // <1>
     }
 }
 ----
@@ -137,7 +138,7 @@ class FnordConfigTest {
     }
 
     @Test
-    public void canGetProperties() { # <1>
+    public void canGetProperties() { // <1>
         assert config.properties.'name' == 'fnord'
         assert config.properties.'locale' == 'xy'
         assert config.properties.'fnord.stuff.locale' == 'xy'
@@ -167,7 +168,7 @@ class LoadFnordIT {
 
     @DataProvider
     Object[][] properties() {
-        [ # <1>
+        [ // <1>
             ['fnord.stuff.locale', 'xy'],
             ['fnord.others.list', ['one thingie', 'another one']],
             ['fnord.some.resource', 'jar:/path/to/the/resource']
