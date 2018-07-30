@@ -1,3 +1,188 @@
 image:https://travis-ci.org/psibre/gradle-marytts-component-plugin.svg?branch=master["Build Status", link="https://travis-ci.org/psibre/gradle-marytts-component-plugin"]
 
 = gradle-marytts-component-plugin
+:toc:
+
+== Plugin configuration
+
+This plugin adds a `marytts.component` extension, which is configured like this:
+
+[source,gradle]
+----
+marytts {
+    component {
+        name = 'Fnord' # <1>
+        packageName = 'fnord.stuff' # <2>
+    }
+}
+----
+<1> Custom component name
+<2> Custom package name
+
+This will generate the *config* file, *service loader*, and *boilerplate Groovy* source code to test and use this component with MaryTTS:
+
+[source]
+----
+build/generatedSrc/
+├── integrationTest
+│   └── groovy
+│       └── fnord # <1>
+│           └── stuff
+│               └── LoadFnordIT.groovy # <2>
+├── main
+│   └── groovy
+│       └── fnord # <1>
+│           └── stuff
+│               └── FnordConfig.groovy # <2>
+└── test
+    └── groovy
+        └── fnord # <1>
+            └── stuff
+                └── FnordConfigTest.groovy # <2>
+----
+<1> Custom package path
+<2> Class names derived from custom component name
+
+=== YAML configuration
+
+Since many MaryTTS components require detailed configuration, the configuration can be externalized into a YAML resource, like this:
+
+[source,gradle]
+----
+marytts {
+    component {
+        config from: 'config.yaml' # <1>
+    }
+}
+----
+<1> YAML config source
+
+IMPORTANT: If a YAML file is specified, it must be readable and valid, otherwise Gradle will fail to configure the project!
+
+[source,yaml]
+----
+# A comment
+
+name: fnord
+locale: &locale xy # <1>
+
+fnord:
+    stuff: # <2>
+        locale: *locale # <1>
+
+    others: # <3>
+    - one thingie
+    - another one
+
+    some.resource: jar:/path/to/the/resource # <4>
+----
+<1> You can use YAML *anchors* and *references* to avoid redundancy!
+<2> Nested config keys will be flattened.
+<3> A list will be converted to a config property with a trailing `.list`.
+<4> A value with a `jar:` prefix will be treated as a classpath resource when the component runs in MaryTTS.
+
+=== Generated config
+
+The above YAML config will generate a configuration like this:
+
+[source]
+----
+name = fnord
+locale = xy
+fnord.stuff.locale = xy
+fnord.others.list = \
+    one thingie \
+    another one
+fnord.some.resource = jar:/path/to/the/resource
+----
+
+=== Generated test code
+
+Groovy source code for unit and integration testing with https://testng.org[TestNG] will be generated to verify that the component can be loaded, and that all configured properties have the expected values.
+Any resources will be loaded as streams to ensure they exist on the classpath.
+
+.FnordConfigTest.groovy
+[source,groovy]
+----
+package fnord.stuff
+
+import marytts.config.*
+import org.testng.annotations.*
+
+class FnordConfigTest {
+
+    FnordConfig config
+
+    @BeforeMethod
+    void setup() {
+        config = new FnordConfig()
+    }
+
+    @Test
+    public void isNotMainConfig() {
+        assert config.isMainConfig() == false
+    }
+
+    @Test
+    public void testConfigBaseClass() {
+        assert config instanceof LanguageConfig
+    }
+
+    @Test
+    public void canGetProperties() { # <1>
+        assert config.properties.'name' == 'fnord'
+        assert config.properties.'locale' == 'xy'
+        assert config.properties.'fnord.stuff.locale' == 'xy'
+        assert config.properties.'fnord.others.list'.tokenize().containsAll(['one thingie', 'another one'])
+        assert config.properties.'fnord.some.resource' == 'jar:/path/to/the/resource'
+    }
+}
+----
+<1> Assertions generated from config
+
+.LoadFnordIT.groovy
+[source,groovy]
+----
+package fnord.stuff
+
+import marytts.server.MaryProperties
+import marytts.util.MaryRuntimeUtils
+
+import org.testng.annotations.*
+
+class LoadFnordIT {
+
+    @BeforeMethod
+    void setup() {
+        MaryRuntimeUtils.ensureMaryStarted()
+    }
+
+    @DataProvider
+    Object[][] properties() {
+        [ # <1>
+            ['fnord.stuff.locale', 'xy'],
+            ['fnord.others.list', ['one thingie', 'another one']],
+            ['fnord.some.resource', 'jar:/path/to/the/resource']
+        ]
+    }
+
+    @Test(dataProvider = 'properties')
+    public void canGetProperty(name, expected) {
+        def actual
+        switch (name) {
+            case ~/.+\.list$/:
+                actual = MaryProperties.getList(name)
+                assert actual.containsAll(expected)
+                break
+            default:
+                actual = MaryProperties.getProperty(name)
+                assert expected == actual
+                break
+        }
+        if ("$expected".startsWith('jar:')) {
+            assert MaryProperties.getStream(name)
+        }
+    }
+}
+----
+<1> Parameterized tests generated from config
