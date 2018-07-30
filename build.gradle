@@ -5,6 +5,7 @@ plugins {
 
 group 'de.dfki.mary'
 version '0.1-SNAPSHOT'
+description 'Utility plugin to build MaryTTS components with Gradle'
 
 gradlePlugin {
     plugins {
