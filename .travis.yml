@@ -5,8 +5,11 @@ branches:
 language: groovy
 jdk:
   - openjdk8
+  - openjdk9
   - openjdk10
   - openjdk11
+  - openjdk12
+  - openjdk13
 
 script: ./gradlew check --info
 
