@@ -3,6 +3,7 @@ package de.dfki.mary
 import de.dfki.mary.tasks.*
 import org.gradle.api.*
 import org.gradle.api.plugins.GroovyPlugin
+import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestReport
 
@@ -10,6 +11,7 @@ class ComponentPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        project.pluginManager.apply JavaLibraryPlugin
         project.pluginManager.apply GroovyPlugin
 
         project.extensions.create 'marytts', MaryttsExtension, project
@@ -28,16 +30,16 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.configurations {
-            integrationTestCompile.extendsFrom testCompile
-            integrationTestRuntime.extendsFrom testRuntime
+            integrationTestImplementation.extendsFrom testImplementation
+            integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
         }
 
         project.dependencies {
-            compile localGroovy()
-            compile group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
+            implementation localGroovy()
+            api group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
                 exclude group: '*', module: 'groovy-all'
             }
-            testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
+            testImplementation group: 'org.testng', name: 'testng', version: '6.14.3'
         }
 
         project.tasks.register 'generateServiceLoader', GenerateServiceLoader, {
