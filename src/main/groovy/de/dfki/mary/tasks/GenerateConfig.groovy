@@ -7,7 +7,7 @@ import org.gradle.api.tasks.*
 class GenerateConfig extends DefaultTask {
 
     @OutputFile
-    final RegularFileProperty destFile = newOutputFile()
+    final RegularFileProperty destFile = project.objects.fileProperty()
 
     @TaskAction
     void generate() {
