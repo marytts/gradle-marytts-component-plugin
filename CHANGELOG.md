@@ -6,8 +6,9 @@ Gradle MaryTTS Component Plugin
 
 ### Changed
 
-- Test on OpenJDK 8, 10, and 11
-- Build with Gradle v5.5.1
+- Test on OpenJDK 8 through 13
+- Build with Gradle v6.0.1
+- Update dependencies
 - [all changes since v0.1]
 
 [v0.1] - 2018-07-30

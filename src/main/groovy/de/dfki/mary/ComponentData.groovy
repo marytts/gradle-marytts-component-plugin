@@ -2,6 +2,7 @@ package de.dfki.mary
 
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.Project
+import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.yaml.snakeyaml.Yaml
 
@@ -13,7 +14,7 @@ class ComponentData {
 
     Property<String> packageName
 
-    Property<Map> config
+    MapProperty<String, Object> config
 
     Property<String> configBaseClass
 
@@ -21,7 +22,7 @@ class ComponentData {
         this.project = project
         name = project.objects.property(String)
         packageName = project.objects.property(String)
-        config = project.objects.property(Map)
+        config = project.objects.mapProperty(String, Object)
         configBaseClass = project.objects.property(String)
     }
 
