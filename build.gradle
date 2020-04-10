@@ -1,7 +1,8 @@
 plugins {
     id 'java-gradle-plugin'
     id 'groovy'
-    id 'com.gradle.plugin-publish' version '0.10.1'
+    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'maven-publish'
 }
 
 group 'de.dfki.mary'
@@ -22,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    api group: 'org.yaml', name: 'snakeyaml', version: '1.25'
+    api group: 'org.yaml', name: 'snakeyaml', version: '1.26'
     testImplementation group: 'org.testng', name: 'testng', version: '7.0.0'
 }
 

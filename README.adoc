@@ -12,6 +12,7 @@ endif::[]
 = Gradle MaryTTS Component Plugin
 :toc:
 :toc-placement!:
+:icons: font
 
 Utility plugin to build http://mary.dfki.de/[MaryTTS] components with https://gradle.org/[Gradle].
 
