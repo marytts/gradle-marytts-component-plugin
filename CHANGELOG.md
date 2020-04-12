@@ -4,6 +4,10 @@ Gradle MaryTTS Component Plugin
 [Unreleased]
 ------------
 
+### Added
+
+- Also test against legacy Gradle v5.1
+
 ### Changed
 
 - Set default compatibility to Java 8
