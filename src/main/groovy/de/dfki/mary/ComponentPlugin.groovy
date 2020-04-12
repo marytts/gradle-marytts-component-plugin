@@ -1,7 +1,11 @@
 package de.dfki.mary
 
-import de.dfki.mary.tasks.*
-import org.gradle.api.*
+import de.dfki.mary.tasks.GenerateConfig
+import de.dfki.mary.tasks.GenerateServiceLoader
+import de.dfki.mary.tasks.GenerateSource
+import org.gradle.api.JavaVersion
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.api.tasks.testing.Test
@@ -13,6 +17,8 @@ class ComponentPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.pluginManager.apply JavaLibraryPlugin
         project.pluginManager.apply GroovyPlugin
+
+        project.sourceCompatibility = JavaVersion.VERSION_1_8
 
         project.extensions.create 'marytts', MaryttsExtension, project
 

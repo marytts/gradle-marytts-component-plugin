@@ -6,6 +6,7 @@ Gradle MaryTTS Component Plugin
 
 ### Changed
 
+- Set default compatibility to Java 8
 - [all changes since v0.2]
 
 [v0.2] - 2020-04-10
