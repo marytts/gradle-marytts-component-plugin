@@ -94,12 +94,14 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register 'integrationTest', Test, {
+            group 'Verification'
+            description 'Runs the integration tests.'
             workingDir = project.buildDir
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
             classpath = project.sourceSets.integrationTest.runtimeClasspath
             systemProperty 'log4j.logger.marytts', 'INFO,stderr'
             testLogging.showStandardStreams = true
-            mustRunAfter project.tasks.named('test')
+            shouldRunAfter project.tasks.named('test')
         }
 
         project.tasks.withType(Test) {

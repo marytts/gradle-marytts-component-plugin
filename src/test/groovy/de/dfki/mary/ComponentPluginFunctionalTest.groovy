@@ -1,37 +1,48 @@
 package de.dfki.mary
 
+import org.gradle.api.JavaVersion
 import org.gradle.testkit.runner.GradleRunner
-import org.testng.annotations.*
+import org.testng.SkipException
+import org.testng.annotations.BeforeGroups
+import org.testng.annotations.DataProvider
+import org.testng.annotations.Test
 
-import static org.gradle.testkit.runner.TaskOutcome.*
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
 
 class ComponentPluginFunctionalTest {
 
     GradleRunner gradle
 
-    @BeforeGroups(groups = 'default')
-    void setupDefault() {
+    void setupGradleAndProjectDir(boolean createCustomFiles, String... resourceNames) {
         def projectDir = File.createTempDir()
-        gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath()
-        ['build-with-defaults.gradle', 'test-tasks.gradle'].each { resourceName ->
+        gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath().forwardOutput()
+        resourceNames.each { resourceName ->
             new File(projectDir, resourceName).withWriter {
                 it << this.class.getResourceAsStream(resourceName)
             }
         }
+        if (createCustomFiles) {
+            def resourceParent = new File(projectDir, 'src/main/resources/path/to/the')
+            resourceParent.mkdirs()
+            new File(resourceParent, 'fnord').createNewFile()
+        }
+    }
+
+    @BeforeGroups(groups = 'default')
+    void setupDefault() {
+        setupGradleAndProjectDir(false, 'build-with-defaults.gradle', 'test-tasks.gradle')
     }
 
     @BeforeGroups(groups = 'custom')
     void setupCustom() {
-        def projectDir = File.createTempDir()
-        gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath()
-        ['customized-build.gradle', 'test-tasks.gradle', 'config.yaml'].each { resourceName ->
-            new File(projectDir, resourceName).withWriter {
-                it << this.class.getResourceAsStream(resourceName)
-            }
-        }
-        def resourceParent = new File(projectDir, 'src/main/resources/path/to/the')
-        resourceParent.mkdirs()
-        new File(resourceParent, 'fnord').createNewFile()
+        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml')
+    }
+
+    @BeforeGroups(groups = 'custom-legacy-gradle')
+    void setupCustomLegacyGradle() {
+        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml')
+        gradle = gradle.withGradleVersion('5.1')
     }
 
     @DataProvider
@@ -54,31 +65,36 @@ class ComponentPluginFunctionalTest {
         ]
     }
 
-    @Test(groups = 'default', dataProvider = 'taskNames')
-    void defaultBuildTestTasks(String taskName, boolean runTestTask) {
-        def result = gradle.withArguments('--info', '--build-file', 'build-with-defaults.gradle', taskName).build()
-        println result.output
+    void runGradleWithBuildFileAndTaskAndOptionalTestTask(String buildFileName, String taskName, boolean runTestTask) {
+        def result = gradle.withArguments('--build-file', buildFileName, taskName).build()
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
             def testTaskName = 'test' + taskName.capitalize()
-            result = gradle.withArguments('--info', '--build-file', 'build-with-defaults.gradle', testTaskName).build()
-            println result.output
+            result = gradle.withArguments('--build-file', buildFileName, testTaskName).build()
             assert result.task(":$taskName").outcome == UP_TO_DATE
             assert result.task(":$testTaskName").outcome == SUCCESS
         }
     }
 
+    @Test(groups = 'default', dataProvider = 'taskNames')
+    void defaultBuildTestTasks(String taskName, boolean runTestTask) {
+        runGradleWithBuildFileAndTaskAndOptionalTestTask('build-with-defaults.gradle', taskName, runTestTask)
+    }
+
     @Test(groups = 'custom', dataProvider = 'taskNames')
     void customBuildTestTasks(String taskName, boolean runTestTask) {
-        def result = gradle.withArguments('--build-file', 'customized-build.gradle', taskName).build()
-        println result.output
-        assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
-        if (runTestTask) {
-            def testTaskName = 'test' + taskName.capitalize()
-            result = gradle.withArguments('--build-file', 'customized-build.gradle', testTaskName).build()
-            println result.output
-            assert result.task(":$taskName").outcome == UP_TO_DATE
-            assert result.task(":$testTaskName").outcome == SUCCESS
+        runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
+    }
+
+    @Test(groups = 'custom-legacy-gradle', dataProvider = 'taskNames')
+    void customLegacyGradleBuildTestTasks(String taskName, boolean runTestTask) {
+        try {
+            runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
+        } catch (all) {
+            if (JavaVersion.current() > JavaVersion.VERSION_12)
+                throw new SkipException(all.message)
+            else
+                throw all
         }
     }
 }
