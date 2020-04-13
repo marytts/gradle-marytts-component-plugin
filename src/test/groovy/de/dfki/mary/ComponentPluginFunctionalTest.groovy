@@ -14,7 +14,7 @@ class ComponentPluginFunctionalTest {
 
     void setupGradleAndProjectDir(boolean createCustomFiles, String... resourceNames) {
         def projectDir = File.createTempDir()
-        gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath()
+        gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath().forwardOutput()
         resourceNames.each { resourceName ->
             new File(projectDir, resourceName).withWriter {
                 it << this.class.getResourceAsStream(resourceName)
@@ -65,12 +65,10 @@ class ComponentPluginFunctionalTest {
 
     void runGradleWithBuildFileAndTaskAndOptionalTestTask(String buildFileName, String taskName, boolean runTestTask) {
         def result = gradle.withArguments('--build-file', buildFileName, taskName).build()
-        println result.output
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
             def testTaskName = 'test' + taskName.capitalize()
             result = gradle.withArguments('--build-file', buildFileName, testTaskName).build()
-            println result.output
             assert result.task(":$taskName").outcome == UP_TO_DATE
             assert result.task(":$testTaskName").outcome == SUCCESS
         }
