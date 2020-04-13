@@ -1,6 +1,8 @@
 package de.dfki.mary
 
+import org.gradle.api.JavaVersion
 import org.gradle.testkit.runner.GradleRunner
+import org.testng.SkipException
 import org.testng.annotations.BeforeGroups
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
@@ -86,6 +88,13 @@ class ComponentPluginFunctionalTest {
 
     @Test(groups = 'custom-legacy-gradle', dataProvider = 'taskNames')
     void customLegacyGradleBuildTestTasks(String taskName, boolean runTestTask) {
-        runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
+        try {
+            runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
+        } catch (all) {
+            if (JavaVersion.current() > JavaVersion.VERSION_12)
+                throw new SkipException(all.message)
+            else
+                throw all
+        }
     }
 }
