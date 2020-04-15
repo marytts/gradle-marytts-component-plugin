@@ -10,6 +10,7 @@ Gradle MaryTTS Component Plugin
 
 ### Changed
 
+- Document plugin behavior
 - Set default compatibility to Java 8
 - [all changes since v0.2]
 
