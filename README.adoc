@@ -9,12 +9,16 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
+:gradle: https://gradle.org/
+:marytts: http://mary.dfki.de/
+:testng: https://testng.org/
+
 = Gradle MaryTTS Component Plugin
 :toc:
 :toc-placement!:
 :icons: font
 
-Utility plugin to build http://mary.dfki.de/[MaryTTS] components with https://gradle.org/[Gradle].
+Utility plugin to build {marytts}[MaryTTS] components with {gradle}[Gradle].
 
 == Plugin Usage
 
@@ -115,7 +119,7 @@ fnord.some.resource = jar:/path/to/the/resource
 
 === Generated test code
 
-Groovy source code for unit and integration testing with https://testng.org[TestNG] will be generated to verify that the component can be loaded, and that all configured properties have the expected values.
+Groovy source code for unit and integration testing with {testng}[TestNG] will be generated to verify that the component can be loaded, and that all configured properties have the expected values.
 Any resources will be loaded as streams to ensure they exist on the classpath.
 
 .FnordConfigTest.groovy
