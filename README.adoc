@@ -9,7 +9,10 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
+:java-library-plugin: https://docs.gradle.org/current/userguide/java_library_plugin.html
 :gradle: https://gradle.org/
+:groovy-plugin: https://docs.gradle.org/current/userguide/groovy_plugin.html
+:jcenter: https://bintray.com/bintray/jcenter
 :marytts: http://mary.dfki.de/
 :testng: https://testng.org/
 
@@ -23,6 +26,25 @@ Utility plugin to build {marytts}[MaryTTS] components with {gradle}[Gradle].
 == Plugin Usage
 
 See https://plugins.gradle.org/plugin/de.dfki.mary.component
+
+== Plugin behavior
+
+To apply this plugin to a Gradle project, Gradle v6.0 or higher is recommended (although Gradle versions as low as v5.1 are compatible).
+
+This plugin, when applied to a project, configures it as follows:
+
+. The {java-library-plugin}[Java Library] and {groovy-plugin}[Groovy] plugins are applied
+. Compatibility is set to Java 8
+. The {jcenter}[JCenter] repository is added
+. Integration tests are set up via the `integrationTest` source set and task
+. Testing is enabled using {testng}[TestNG]
+
+Specifically for MaryTTS, additional classes and resources are generated and included in the main configuration classpath:
+
+. A service loader
+. A MaryTTS config file (see <<generated-config,below>>)
+. A MaryTTS component Config class
+. Unit and integration tests (see <<generated-tests,below>>)
 
 == Plugin configuration
 
@@ -103,6 +125,7 @@ fnord:
 <4> A value with a `jar:` prefix will be treated as a classpath resource when the component runs in MaryTTS.
 
 === Generated config
+[[generated-config]]
 
 The above YAML config will generate a configuration like this:
 
@@ -118,6 +141,7 @@ fnord.some.resource = jar:/path/to/the/resource
 ----
 
 === Generated test code
+[[generated-tests]]
 
 Groovy source code for unit and integration testing with {testng}[TestNG] will be generated to verify that the component can be loaded, and that all configured properties have the expected values.
 Any resources will be loaded as streams to ensure they exist on the classpath.
