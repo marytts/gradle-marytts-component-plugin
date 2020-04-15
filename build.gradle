@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'de.dfki.mary'
-version '0.2.1'
+version '0.3-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
 
 sourceCompatibility = 1.8
