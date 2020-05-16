@@ -15,7 +15,7 @@ class ComponentDataTest {
     }
 
     @Test
-    void 'Given name, With defaults, Then value is correct'() {
+    void 'Given name, When defaults are used, Then value is correct'() {
         assert componentData.name == 'MyComponent'
     }
 
@@ -27,7 +27,7 @@ class ComponentDataTest {
     }
 
     @Test
-    void 'Given packageName, With defaults, Then value is correct'() {
+    void 'Given packageName, When defaults are used, Then value is correct'() {
         assert componentData.packageName == 'mypackage'
     }
 
@@ -39,7 +39,7 @@ class ComponentDataTest {
     }
 
     @Test
-    void 'Given packagePath, With defaults, Then value is correct'() {
+    void 'Given packagePath, When defaults are used, Then value is correct'() {
         assert componentData.packagePath == 'mypackage'
     }
 
@@ -50,7 +50,7 @@ class ComponentDataTest {
     }
 
     @Test
-    void 'Given config, With defaults, value is correct'() {
+    void 'Given config, When defaults are used, value is correct'() {
         assert componentData.config == [:]
     }
 
@@ -67,7 +67,7 @@ class ComponentDataTest {
     }
 
     @Test
-    void 'Given configBaseClass, With defaults, Then value is correct'() {
+    void 'Given configBaseClass, When defaults are used, Then value is correct'() {
         assert componentData.configBaseClass == 'MaryConfig'
     }
 
