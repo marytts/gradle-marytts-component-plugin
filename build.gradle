@@ -1,6 +1,8 @@
 plugins {
     id 'java-gradle-plugin'
     id 'groovy'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.10.1'
     id 'com.gradle.plugin-publish' version '0.11.0'
     id 'maven-publish'
 }
@@ -33,8 +35,24 @@ test {
     useTestNG()
     failFast = true
     testLogging {
+        events 'passed', 'failed', 'skipped'
         exceptionFormat = 'full'
+        info {
+            showStandardStreams = true
+        }
     }
+    finalizedBy jacocoTestReport
+    jacoco {
+        excludes = [
+                'de.dfki.mary.ComponentPlugin',
+                'de.dfki.mary.tasks.*'
+        ]
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports.xml.enabled = true
 }
 
 pluginBundle {
