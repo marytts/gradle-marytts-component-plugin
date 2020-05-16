@@ -2,6 +2,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'groovy'
     id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.10.1'
     id 'com.gradle.plugin-publish' version '0.11.0'
     id 'maven-publish'
 }
@@ -51,6 +52,7 @@ test {
 
 jacocoTestReport {
     dependsOn test
+    reports.xml.enabled = true
 }
 
 pluginBundle {
