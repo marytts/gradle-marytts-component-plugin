@@ -19,110 +19,39 @@ class GenerateSource extends DefaultTask {
     @TaskAction
     void generate() {
 
-        configClassFile.get().asFile.text =
-                """|package $project.marytts.component.packageName
-                   |
-                   |import marytts.config.*
-                   |
-                   |class ${project.marytts.component.name}Config extends $project.marytts.component.configBaseClass {
-                   |
-                   |    ${project.marytts.component.name}Config() {
-                   |        super(${project.marytts.component.name}Config.class.getResourceAsStream('${project.marytts.component.name.toLowerCase()}.config'))
-                   |    }
-                   |}
-                   |""".stripMargin()
+        def engine = new groovy.text.GStringTemplateEngine()
+        def binding = [ project: project ]
 
-        configTestFile.get().asFile.text =
-            """|package $project.marytts.component.packageName
-               |
-               |import marytts.config.*
-               |import org.testng.annotations.*
-               |
-               |class ${project.marytts.component.name}ConfigTest {
-               |
-               |    ${project.marytts.component.name}Config config
-               |
-               |    @BeforeMethod
-               |    void setup() {
-               |        config = new ${project.marytts.component.name}Config()
-               |    }
-               |
-               |    @Test
-               |    public void isNotMainConfig() {
-               |        assert config.isMainConfig() == false
-               |    }
-               |
-               |    @Test
-               |    public void testConfigBaseClass() {
-               |        assert config instanceof $project.marytts.component.configBaseClass
-               |    }
-               |
-               |    @Test
-               |    public void canGetProperties() {
-               |""".stripMargin() +
-                    project.marytts.component.config.collect { name, value ->
-                        if (value instanceof List) {
-                            return "        assert config.properties.'${name}.list'.tokenize().containsAll(${value.collect { '\'' + it + '\'' }})"
-                        } else {
-                            return "        assert config.properties.'$name' == '$value'"
-                        }
-                    }.join('\n') +
-                    """|
-               |    }
-               |}
-               |""".stripMargin()
+        def f = new File(getClass().getResource('ConfigClass.groovy').toURI())
+        def template = engine.createTemplate(f).make(binding)
+        configClassFile.get().asFile.text = template.toString()
 
 
-        integrationTestFile.get().asFile.text =
-            """|package $project.marytts.component.packageName
-               |
-               |import marytts.server.MaryProperties
-               |import marytts.util.MaryRuntimeUtils
-               |
-               |import org.testng.annotations.*
-               |
-               |class Load${project.marytts.component.name}IT {
-               |
-               |    @BeforeMethod
-               |    void setup() {
-               |        MaryRuntimeUtils.ensureMaryStarted()
-               |    }
-               |
-               |    @DataProvider
-               |    Object[][] properties() {
-               |        [
-               |""".stripMargin() +
-                    project.marytts.component.config.findAll {
-                        !(it.key in ['locale', 'name'])
-                    }.collect { name, value ->
-                        if (value instanceof List) {
-                            return "            ['${name}.list', ${value.collect { '\'' + it + '\'' }}]"
-                        } else {
-                            return "            ['$name', '$value']"
-                        }
-                    }.join(',\n') +
-                    """|
-               |        ]
-               |    }
-               |
-               |    @Test(dataProvider = 'properties')
-               |    public void canGetProperty(name, expected) {
-               |        def actual
-               |        switch (name) {
-               |            case ~/.+\\.list\$/:
-               |                actual = MaryProperties.getList(name)
-               |                assert actual.containsAll(expected)
-               |                break
-               |            default:
-               |                actual = MaryProperties.getProperty(name)
-               |                assert expected == actual
-               |                break
-               |        }
-               |        if ("\$expected".startsWith('jar:')) {
-               |            assert MaryProperties.getStream(name)
-               |        }
-               |    }
-               |}
-               |""".stripMargin()
+        def assert_prop_str = project.marytts.component.config.collect { name, value ->
+            if (value instanceof List) {
+                return "        assert config.properties.'${name}.list'.tokenize().containsAll(${value.collect { '\'' + it + '\'' }})"
+            } else {
+                return "        assert config.properties.'$name' == '$value'"
+            }
+        }.join('\n')
+
+
+        f = new File(getClass().getResource('ConfigTest.groovy').toURI())
+        template = engine.createTemplate(f).make(binding + [assert_prop: assert_prop_str])
+        configTestFile.get().asFile.text = template.toString()
+
+
+        assert_prop_str = project.marytts.component.config.findAll {
+            !(it.key in ['locale', 'name'])
+        }.collect { name, value ->
+            if (value instanceof List) {
+                return "            ['${name}.list', ${value.collect { '\'' + it + '\'' }}]"
+            } else {
+                return "            ['$name', '$value']"
+            }
+        }.join(',\n')
+        f = new File(getClass().getResource('IntegrationTest.groovy').toURI())
+        template = engine.createTemplate(f).make(binding + [assert_prop: assert_prop_str])
+        integrationTestFile.get().asFile.text = template.toString()
     }
 }
