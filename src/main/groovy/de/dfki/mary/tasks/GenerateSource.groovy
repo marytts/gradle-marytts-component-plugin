@@ -1,6 +1,5 @@
 package de.dfki.mary.tasks
 
-
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.*
@@ -22,7 +21,7 @@ class GenerateSource extends DefaultTask {
         def engine = new groovy.text.GStringTemplateEngine()
         def binding = [ project: project ]
 
-        def f = new File(getClass().getResource('ConfigClass.groovy').toURI())
+        def f = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.groovy'))
         def template = engine.createTemplate(f).make(binding)
         configClassFile.get().asFile.text = template.toString()
 
@@ -36,7 +35,7 @@ class GenerateSource extends DefaultTask {
         }.join('\n')
 
 
-        f = new File(getClass().getResource('ConfigTest.groovy').toURI())
+        f = new InputStreamReader(getClass().getResourceAsStream('ConfigTest.groovy'))
         template = engine.createTemplate(f).make(binding + [assert_prop: assert_prop_str])
         configTestFile.get().asFile.text = template.toString()
 
@@ -50,7 +49,8 @@ class GenerateSource extends DefaultTask {
                 return "            ['$name', '$value']"
             }
         }.join(',\n')
-        f = new File(getClass().getResource('IntegrationTest.groovy').toURI())
+
+        f = new InputStreamReader(getClass().getResourceAsStream('IntegrationTest.groovy'))
         template = engine.createTemplate(f).make(binding + [assert_prop: assert_prop_str])
         integrationTestFile.get().asFile.text = template.toString()
     }
