@@ -21,6 +21,9 @@ class ComponentPlugin implements Plugin<Project> {
         project.sourceCompatibility = JavaVersion.VERSION_1_8
 
         project.extensions.create 'marytts', MaryttsExtension, project
+        project.marytts {
+            version = "5.2"
+        }
 
         project.repositories {
             jcenter()
@@ -42,7 +45,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.dependencies {
             implementation localGroovy()
-            api group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
+            api group: 'de.dfki.mary', name: 'marytts-runtime', version: project.marytts.version, {
                 exclude group: '*', module: 'groovy-all'
             }
             testImplementation group: 'org.testng', name: 'testng', version: '7.0.0'
