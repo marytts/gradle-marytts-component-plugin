@@ -60,7 +60,7 @@ pluginBundle {
     website = url
     vcsUrl = url
     description = project.description
-    tags = ['marytts', 'plugin', 'text-to-speech', 'tts', 'speech synthesis']
+    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
 
     plugins {
         componentPlugin {
