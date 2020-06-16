@@ -109,7 +109,7 @@ publishing {
                 }
                 ciManagement {
                     system = 'Travis CI'
-                    url = 'https://travis-ci.com/githubmarytts/gradle-marytts-component-plugin'
+                    url = 'https://travis-ci.com/github/marytts/gradle-marytts-component-plugin'
                 }
                 distributionManagement {
                     downloadUrl = 'https://bintray.com/marytts/gradle-marytts-component-plugin/marytts'
