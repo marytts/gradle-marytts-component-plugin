@@ -19,7 +19,7 @@ class GenerateSource extends DefaultTask {
     void generate() {
 
         def engine = new groovy.text.GStringTemplateEngine()
-        def binding = [ project: project ]
+        def binding = [project: project]
 
         def f = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.groovy'))
         def template = engine.createTemplate(f).make(binding)
