@@ -127,7 +127,7 @@ publishing {
                 name 'OJO'
                 url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
             } else {
-                name 'Bintray'
+                name 'JCenter'
                 url 'https://api.bintray.com/maven/marytts/marytts/gradle-marytts-component-plugin'
             }
             credentials {
