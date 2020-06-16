@@ -21,8 +21,8 @@ class GenerateSource extends DefaultTask {
         def engine = new groovy.text.GStringTemplateEngine()
         def binding = [project: project]
 
-        def f = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.groovy'))
-        def template = engine.createTemplate(f).make(binding)
+        def templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.groovy'))
+        def template = engine.createTemplate(templateStream).make(binding)
         configClassFile.get().asFile.text = template.toString()
 
 
@@ -35,8 +35,8 @@ class GenerateSource extends DefaultTask {
         }.join('\n')
 
 
-        f = new InputStreamReader(getClass().getResourceAsStream('ConfigTest.groovy'))
-        template = engine.createTemplate(f).make(binding + [assert_prop: assert_prop_str])
+        templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigTest.groovy'))
+        template = engine.createTemplate(templateStream).make(binding + [assert_prop: assert_prop_str])
         configTestFile.get().asFile.text = template.toString()
 
 
@@ -50,8 +50,8 @@ class GenerateSource extends DefaultTask {
             }
         }.join(',\n')
 
-        f = new InputStreamReader(getClass().getResourceAsStream('IntegrationTest.groovy'))
-        template = engine.createTemplate(f).make(binding + [assert_prop: assert_prop_str])
+        templateStream = new InputStreamReader(getClass().getResourceAsStream('IntegrationTest.groovy'))
+        template = engine.createTemplate(templateStream).make(binding + [assert_prop: assert_prop_str])
         integrationTestFile.get().asFile.text = template.toString()
     }
 }
