@@ -2,18 +2,18 @@ package de.dfki.mary.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.*
 
 class GenerateSource extends DefaultTask {
+    @OutputDirectory
+    final DirectoryProperty srcDirectory = project.objects.directoryProperty()
 
-    @OutputFile
-    final RegularFileProperty configClassFile = project.objects.fileProperty()
+    @OutputDirectory
+    final DirectoryProperty testDirectory = project.objects.directoryProperty()
 
-    @OutputFile
-    final RegularFileProperty configTestFile = project.objects.fileProperty()
-
-    @OutputFile
-    final RegularFileProperty integrationTestFile = project.objects.fileProperty()
+    @OutputDirectory
+    final DirectoryProperty integrationTestDirectory = project.objects.directoryProperty()
 
     @TaskAction
     void generate() {
@@ -23,8 +23,9 @@ class GenerateSource extends DefaultTask {
 
         def templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.groovy'))
         def template = engine.createTemplate(templateStream).make(binding)
-        configClassFile.get().asFile.text = template.toString()
-
+        def configClassFile = new File(srcDirectory.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}Config.groovy")
+        configClassFile.parentFile.mkdirs()
+        configClassFile.text = template.toString()
 
         def assert_prop_str = project.marytts.component.config.collect { name, value ->
             if (value instanceof List) {
@@ -37,7 +38,9 @@ class GenerateSource extends DefaultTask {
 
         templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigTest.groovy'))
         template = engine.createTemplate(templateStream).make(binding + [assert_prop: assert_prop_str])
-        configTestFile.get().asFile.text = template.toString()
+        def configTestFile = new File(testDirectory.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}ConfigTest.groovy")
+        configTestFile.parentFile.mkdirs()
+        configTestFile.text = template.toString()
 
 
         assert_prop_str = project.marytts.component.config.findAll {
@@ -52,6 +55,8 @@ class GenerateSource extends DefaultTask {
 
         templateStream = new InputStreamReader(getClass().getResourceAsStream('IntegrationTest.groovy'))
         template = engine.createTemplate(templateStream).make(binding + [assert_prop: assert_prop_str])
-        integrationTestFile.get().asFile.text = template.toString()
+        def integrationTestFile = new File(integrationTestDirectory.get().asFile, "${project.marytts.component.packagePath}/Load${project.marytts.component.name}IT.groovy")
+        integrationTestFile.parentFile.mkdirs()
+        integrationTestFile.text = template.toString()
     }
 }

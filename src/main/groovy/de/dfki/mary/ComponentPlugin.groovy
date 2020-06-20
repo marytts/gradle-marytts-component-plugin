@@ -56,9 +56,9 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register 'generateSource', GenerateSource, {
-            configClassFile = project.layout.buildDirectory.file("generatedSrc/main/groovy/${project.marytts.component.packagePath}/${project.marytts.component.name}Config.groovy")
-            configTestFile =  project.layout.buildDirectory.file("generatedSrc/test/groovy/${project.marytts.component.packagePath}/${project.marytts.component.name}ConfigTest.groovy")
-            integrationTestFile =  project.layout.buildDirectory.file("generatedSrc/integrationTest/groovy/${project.marytts.component.packagePath}/Load${project.marytts.component.name}IT.groovy")
+            srcDirectory = project.file("$project.buildDir/generatedSrc/main/groovy/")
+            testDirectory = project.file("$project.buildDir/generatedSrc/test/groovy/component")
+            integrationTestDirectory = project.file("$project.buildDir/generatedSrc/integrationTest/groovy/component")
         }
 
         project.tasks.register 'generateConfig', GenerateConfig, {
@@ -68,17 +68,17 @@ class ComponentPlugin implements Plugin<Project> {
         project.sourceSets {
             main {
                 groovy {
-                    srcDirs += "${project.buildDir}/generatedSrc/main/groovy"
+                    srcDirs += project.generateSource.srcDirectory.get()
                 }
             }
             test {
                 groovy {
-                    srcDirs += "${project.buildDir}/generatedSrc/test/groovy"
+                    srcDirs += project.generateSource.testDirectory.get()
                 }
             }
             integrationTest {
                 groovy {
-                    srcDirs += "${project.buildDir}/generatedSrc/integrationTest/groovy"
+                    srcDirs += project.generateSource.integrationTestDirectory.get()
                 }
             }
         }
