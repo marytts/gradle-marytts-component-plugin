@@ -2,7 +2,8 @@ package de.dfki.mary.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
 
 class GenerateConfig extends DefaultTask {
 

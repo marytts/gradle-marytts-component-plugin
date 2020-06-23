@@ -4,9 +4,14 @@ Gradle MaryTTS Component Plugin
 [Unreleased]
 ------------
 
+### Adding
+
+- Publishing POM metadata
+
 ### Changed
 
 - Build with Gradle v6.4
+- Use Groovy templating to generate sources
 - [all changes since v0.2.1]
 
 [v0.2.1] - 2020-04-15

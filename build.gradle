@@ -44,8 +44,8 @@ test {
     finalizedBy jacocoTestReport
     jacoco {
         excludes = [
-                'de.dfki.mary.ComponentPlugin',
-                'de.dfki.mary.tasks.*'
+            'de.dfki.mary.ComponentPlugin',
+            'de.dfki.mary.tasks.*'
         ]
     }
 }
@@ -65,6 +65,78 @@ pluginBundle {
     plugins {
         componentPlugin {
             displayName = 'Gradle MaryTTS Component Plugin'
+        }
+    }
+}
+
+
+publishing {
+    afterEvaluate {
+        publications {
+            withType(MavenPublication) {
+                pom {
+                    name = 'MaryTTS Component Plugin'
+                    description = 'A base plugin for every component developed for MaryTTS'
+                    url = 'https://github.com/marytts/gradle-marytts-component-plugin'
+                    inceptionYear = '2017'
+                    organization {
+                        name = 'DFKI GmbH'
+                        url = 'https://dfki.de/'
+                    }
+                    licenses {
+                        license {
+                            name = 'GNU Lesser General Public License v3.0'
+                            url = 'https://www.gnu.org/licenses/lgpl-3.0-standalone.html'
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = 'Sébastien Le Maguer'
+                            url = 'https://github.com/seblemaguer'
+                        }
+                        developer {
+                            name = 'Ingmar Steiner'
+                            url = 'https://github.com/psibre'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:https://github.com/marytts/gradle-marytts-component-plugin.git'
+                        developerConnection = 'scm:git:git@github.com/marytts/gradle-marytts-component-plugin.git'
+                        url = 'https://github.com/marytts/gradle-marytts-component-plugin'
+                    }
+                    issueManagement {
+                        system = 'GitHub'
+                        url = 'https://github.com/marytts/gradle-marytts-component-plugin/issues'
+                    }
+                    ciManagement {
+                        system = 'Travis CI'
+                        url = 'https://travis-ci.com/github/marytts/gradle-marytts-component-plugin'
+                    }
+                    distributionManagement {
+                        downloadUrl = 'https://bintray.com/marytts/gradle-marytts-component-plugin/marytts'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name 'Project'
+                url "$rootProject.buildDir/repo"
+            }
+            maven {
+                if (version.endsWith('-SNAPSHOT')) {
+                    name 'OJO'
+                    url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
+                } else {
+                    name 'JCenter'
+                    url 'https://api.bintray.com/maven/marytts/marytts/gradle-marytts-component-plugin'
+                }
+                credentials {
+                    username = findProperty('bintrayUser')
+                    password = findProperty('bintrayApiKey')
+                }
+            }
         }
     }
 }

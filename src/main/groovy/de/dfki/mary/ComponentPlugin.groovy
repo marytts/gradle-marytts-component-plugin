@@ -21,6 +21,9 @@ class ComponentPlugin implements Plugin<Project> {
         project.sourceCompatibility = JavaVersion.VERSION_1_8
 
         project.extensions.create 'marytts', MaryttsExtension, project
+        project.marytts {
+            version = "5.2"
+        }
 
         project.repositories {
             jcenter()
@@ -42,7 +45,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.dependencies {
             implementation localGroovy()
-            api group: 'de.dfki.mary', name: 'marytts-runtime', version: '5.2', {
+            api group: 'de.dfki.mary', name: 'marytts-runtime', version: project.marytts.version, {
                 exclude group: '*', module: 'groovy-all'
             }
             testImplementation group: 'org.testng', name: 'testng', version: '7.0.0'
@@ -53,7 +56,9 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register 'generateSource', GenerateSource, {
-            destDir = project.layout.buildDirectory.dir('generatedSrc')
+            srcDirectory = project.file("$project.buildDir/generatedSrc/main/groovy/")
+            testDirectory = project.file("$project.buildDir/generatedSrc/test/groovy/component")
+            integrationTestDirectory = project.file("$project.buildDir/generatedSrc/integrationTest/groovy/component")
         }
 
         project.tasks.register 'generateConfig', GenerateConfig, {
@@ -63,17 +68,17 @@ class ComponentPlugin implements Plugin<Project> {
         project.sourceSets {
             main {
                 groovy {
-                    srcDirs += "${project.generateSource.destDir.get()}/main/groovy"
+                    srcDirs += project.generateSource.srcDirectory.get()
                 }
             }
             test {
                 groovy {
-                    srcDirs += "${project.generateSource.destDir.get()}/test/groovy"
+                    srcDirs += project.generateSource.testDirectory.get()
                 }
             }
             integrationTest {
                 groovy {
-                    srcDirs += "${project.generateSource.destDir.get()}/integrationTest/groovy"
+                    srcDirs += project.generateSource.integrationTestDirectory.get()
                 }
             }
         }
