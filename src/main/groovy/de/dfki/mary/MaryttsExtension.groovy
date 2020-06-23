@@ -1,7 +1,6 @@
 package de.dfki.mary
 
-import org.gradle.api.*
-
+import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 
