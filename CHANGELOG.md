@@ -1,6 +1,13 @@
 Gradle MaryTTS Component Plugin
 ===============================
 
+[Unreleased]
+------------
+
+### Changed
+
+- [all changes since v0.2.2]
+
 [v0.2.2] - 2020-06-26
 ---------------------
 
