@@ -56,7 +56,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register 'generateSource', GenerateSource, {
-            srcDirectory = project.file("$project.buildDir/generatedSrc/main/groovy/")
+            srcDirectory = project.file("$project.buildDir/generatedSrc/main/java/")
             testDirectory = project.file("$project.buildDir/generatedSrc/test/groovy/component")
             integrationTestDirectory = project.file("$project.buildDir/generatedSrc/integrationTest/groovy/component")
         }

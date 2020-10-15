@@ -21,9 +21,9 @@ class GenerateSource extends DefaultTask {
         def engine = new groovy.text.GStringTemplateEngine()
         def binding = [project: project]
 
-        def templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.groovy'))
+        def templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.java'))
         def template = engine.createTemplate(templateStream).make(binding)
-        def configClassFile = new File(srcDirectory.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}Config.groovy")
+        def configClassFile = new File(srcDirectory.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}Config.java")
         configClassFile.parentFile.mkdirs()
         configClassFile.text = template.toString()
 
