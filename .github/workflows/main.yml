@@ -9,6 +9,9 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        java-version: [ 8, 11 ]
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +22,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 11
+          java-version: ${{ matrix.java-version }}
 
       - name: Setup Gradle cache
         uses: actions/cache@v2
