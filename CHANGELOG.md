@@ -6,6 +6,7 @@ Gradle MaryTTS Component Plugin
 
 ### Changed
 
+- Migrated from Travis CI to GitHub Actions
 - [all changes since v0.2.2]
 
 [v0.2.2] - 2020-06-26
