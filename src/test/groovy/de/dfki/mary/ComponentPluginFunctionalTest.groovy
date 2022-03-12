@@ -17,6 +17,7 @@ class ComponentPluginFunctionalTest {
 
     void setupGradleAndProjectDir(boolean createCustomFiles, String... resourceNames) {
         def projectDir = File.createTempDir()
+        new File(projectDir, 'settings.gradle').createNewFile()
         gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath().forwardOutput()
         resourceNames.each { resourceName ->
             new File(projectDir, resourceName).withWriter {
