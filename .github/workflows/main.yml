@@ -35,9 +35,12 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
-        env:
-          GRADLE_OPTS: -Dorg.gradle.daemon=false
         run: ./gradlew build
+
+      - name: Generate coverage report, send to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: ./gradlew jacocoTestReport coveralls
 
       - name: Cleanup Gradle cache
         run: |
