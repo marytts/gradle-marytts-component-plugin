@@ -2,6 +2,7 @@ package de.dfki.mary
 
 import org.gradle.api.JavaVersion
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.testng.SkipException
 import org.testng.annotations.BeforeGroups
 import org.testng.annotations.DataProvider
@@ -87,7 +88,7 @@ class ComponentPluginFunctionalTest {
         runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
     }
 
-    @Test(groups = 'custom-legacy-gradle', dataProvider = 'taskNames')
+    @Test(groups = 'custom-legacy-gradle', dataProvider = 'taskNames', expectedExceptions = UnexpectedBuildFailure.class)
     void customLegacyGradleBuildTestTasks(String taskName, boolean runTestTask) {
         try {
             runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
