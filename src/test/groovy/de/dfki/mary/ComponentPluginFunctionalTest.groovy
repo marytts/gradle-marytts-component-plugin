@@ -66,7 +66,7 @@ class ComponentPluginFunctionalTest {
     }
 
     void runGradleWithBuildFileAndTaskAndOptionalTestTask(String buildFileName, String taskName, boolean runTestTask) {
-        def gradleArgs = ['--build-file', buildFileName]
+        def gradleArgs = ['--warning-mode', 'all', '--build-file', buildFileName]
         def result = gradle.withArguments(gradleArgs + [taskName]).build()
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
