@@ -23,7 +23,7 @@ gradlePlugin {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
