@@ -66,11 +66,12 @@ class ComponentPluginFunctionalTest {
     }
 
     void runGradleWithBuildFileAndTaskAndOptionalTestTask(String buildFileName, String taskName, boolean runTestTask) {
-        def result = gradle.withArguments('--build-file', buildFileName, taskName).build()
+        def gradleArgs = ['--build-file', buildFileName]
+        def result = gradle.withArguments(gradleArgs + [taskName]).build()
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
             def testTaskName = 'test' + taskName.capitalize()
-            result = gradle.withArguments('--build-file', buildFileName, testTaskName).build()
+            result = gradle.withArguments(gradleArgs + [testTaskName]).build()
             assert result.task(":$taskName").outcome == UP_TO_DATE
             assert result.task(":$testTaskName").outcome == SUCCESS
         }
