@@ -52,7 +52,7 @@ test {
 
 jacocoTestReport {
     dependsOn test
-    reports.xml.enabled = true
+    reports.xml.required = true
 }
 
 pluginBundle {
