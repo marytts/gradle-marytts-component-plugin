@@ -11,8 +11,6 @@ group 'de.dfki.mary'
 version '0.3-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
 
-sourceCompatibility = 1.8
-
 gradlePlugin {
     plugins {
         componentPlugin {
@@ -29,6 +27,12 @@ repositories {
 dependencies {
     api group: 'org.yaml', name: 'snakeyaml', version: '1.30'
     testImplementation group: 'org.testng', name: 'testng', version: '7.5'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
 }
 
 test {
