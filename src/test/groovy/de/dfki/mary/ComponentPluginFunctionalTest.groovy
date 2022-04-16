@@ -2,6 +2,7 @@ package de.dfki.mary
 
 import org.gradle.api.JavaVersion
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.testng.SkipException
 import org.testng.annotations.BeforeGroups
 import org.testng.annotations.DataProvider
@@ -16,6 +17,7 @@ class ComponentPluginFunctionalTest {
 
     void setupGradleAndProjectDir(boolean createCustomFiles, String... resourceNames) {
         def projectDir = File.createTempDir()
+        new File(projectDir, 'settings.gradle').createNewFile()
         gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath().forwardOutput()
         resourceNames.each { resourceName ->
             new File(projectDir, resourceName).withWriter {
@@ -66,11 +68,12 @@ class ComponentPluginFunctionalTest {
     }
 
     void runGradleWithBuildFileAndTaskAndOptionalTestTask(String buildFileName, String taskName, boolean runTestTask) {
-        def result = gradle.withArguments('--build-file', buildFileName, taskName).build()
+        def gradleArgs = ['--warning-mode', 'all', '--build-file', buildFileName]
+        def result = gradle.withArguments(gradleArgs + [taskName]).build()
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
             def testTaskName = 'test' + taskName.capitalize()
-            result = gradle.withArguments('--build-file', buildFileName, testTaskName).build()
+            result = gradle.withArguments(gradleArgs + [testTaskName]).build()
             assert result.task(":$taskName").outcome == UP_TO_DATE
             assert result.task(":$testTaskName").outcome == SUCCESS
         }
@@ -86,7 +89,7 @@ class ComponentPluginFunctionalTest {
         runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
     }
 
-    @Test(groups = 'custom-legacy-gradle', dataProvider = 'taskNames')
+    @Test(groups = 'custom-legacy-gradle', dataProvider = 'taskNames', expectedExceptions = UnexpectedBuildFailure.class)
     void customLegacyGradleBuildTestTasks(String taskName, boolean runTestTask) {
         try {
             runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)

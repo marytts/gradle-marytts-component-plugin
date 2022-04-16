@@ -48,7 +48,7 @@ class ComponentPlugin implements Plugin<Project> {
             api group: 'de.dfki.mary', name: 'marytts-runtime', version: project.marytts.version, {
                 exclude group: '*', module: 'groovy-all'
             }
-            testImplementation group: 'org.testng', name: 'testng', version: '7.0.0'
+            testImplementation group: 'org.testng', name: 'testng', version: '7.5'
         }
 
         project.tasks.register 'generateServiceLoader', GenerateServiceLoader, {

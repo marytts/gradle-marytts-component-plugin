@@ -11,8 +11,6 @@ group 'de.dfki.mary'
 version '0.3-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
 
-sourceCompatibility = 1.8
-
 gradlePlugin {
     plugins {
         componentPlugin {
@@ -23,12 +21,18 @@ gradlePlugin {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    api group: 'org.yaml', name: 'snakeyaml', version: '1.26'
-    testImplementation group: 'org.testng', name: 'testng', version: '7.0.0'
+    api group: 'org.yaml', name: 'snakeyaml', version: '1.30'
+    testImplementation group: 'org.testng', name: 'testng', version: '7.5'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
 }
 
 test {
@@ -44,15 +48,15 @@ test {
     finalizedBy jacocoTestReport
     jacoco {
         excludes = [
-            'de.dfki.mary.ComponentPlugin',
-            'de.dfki.mary.tasks.*'
+                'de.dfki.mary.ComponentPlugin',
+                'de.dfki.mary.tasks.*'
         ]
     }
 }
 
 jacocoTestReport {
     dependsOn test
-    reports.xml.enabled = true
+    reports.xml.required = true
 }
 
 pluginBundle {
