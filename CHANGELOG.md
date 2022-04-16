@@ -6,6 +6,9 @@ Gradle MaryTTS Component Plugin
 
 ### Changed
 
+- Build with Gradle v7.4.2
+- Test on JDK 8, 11, 17
+- Upgraded plugins, dependencies
 - Migrated from Travis CI to GitHub Actions
 - [all changes since v0.2.2]
 
