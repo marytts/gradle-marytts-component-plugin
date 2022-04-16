@@ -44,8 +44,8 @@ test {
     finalizedBy jacocoTestReport
     jacoco {
         excludes = [
-            'de.dfki.mary.ComponentPlugin',
-            'de.dfki.mary.tasks.*'
+                'de.dfki.mary.ComponentPlugin',
+                'de.dfki.mary.tasks.*'
         ]
     }
 }
