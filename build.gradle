@@ -37,6 +37,7 @@ java {
 
 test {
     useTestNG()
+    systemProperty 'java.io.tmpdir', temporaryDir
     failFast = true
     testLogging {
         events 'passed', 'failed', 'skipped'
