@@ -23,7 +23,7 @@ task testGenerateServiceLoader {
 task testGenerateSource {
     dependsOn generateSource
     doLast {
-        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/$componentPackagePath/${componentName}Config.groovy"))
+        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/java/$componentPackagePath/${componentName}Config.java"))
         assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/component/$componentPackagePath/${componentName}ConfigTest.groovy"))
         assert sourceSets.integrationTest.allSource.contains(file("$buildDir/generatedSrc/integrationTest/groovy/component/$componentPackagePath/Load${componentName}IT.groovy"))
     }
