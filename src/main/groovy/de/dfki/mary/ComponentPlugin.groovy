@@ -1,10 +1,6 @@
 package de.dfki.mary
 
-import de.dfki.mary.tasks.GenerateConfig
-import de.dfki.mary.tasks.GenerateIntegrationTestSource
-import de.dfki.mary.tasks.GenerateServiceLoader
-import de.dfki.mary.tasks.GenerateSource
-import de.dfki.mary.tasks.GenerateTestSource
+import de.dfki.mary.tasks.*
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -57,15 +53,15 @@ class ComponentPlugin implements Plugin<Project> {
             destFile = project.layout.buildDirectory.file('serviceLoader.txt')
         }
 
-        project.tasks.register 'generateSource', GenerateSource, {
+        def generateSourceTask = project.tasks.register 'generateSource', GenerateSource, {
             destDir = project.layout.buildDirectory.dir('generatedSrc')
         }
 
-        project.tasks.register 'generateTestSource', GenerateTestSource, {
+        def generateTestSourceTask = project.tasks.register 'generateTestSource', GenerateTestSource, {
             destDir = project.layout.buildDirectory.dir('generatedTestSrc')
         }
 
-        project.tasks.register 'generateIntegrationTestSource', GenerateIntegrationTestSource, {
+        def generateIntegrationTestSourceTask = project.tasks.register 'generateIntegrationTestSource', GenerateIntegrationTestSource, {
             destDir = project.layout.buildDirectory.dir('generatedIntegrationTestSrc')
         }
 
@@ -74,21 +70,9 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.sourceSets {
-            main {
-                java {
-                    srcDirs += project.generateSource.destDir.get()
-                }
-            }
-            test {
-                groovy {
-                    srcDirs += project.generateTestSource.destDir.get()
-                }
-            }
-            integrationTest {
-                groovy {
-                    srcDirs += project.generateIntegrationTestSource.destDir.get()
-                }
-            }
+            main.java.srcDir generateSourceTask
+            test.groovy.srcDir generateTestSourceTask
+            integrationTest.groovy.srcDir generateIntegrationTestSourceTask
         }
 
         project.processResources {
