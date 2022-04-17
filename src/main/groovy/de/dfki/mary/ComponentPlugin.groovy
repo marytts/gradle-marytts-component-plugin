@@ -58,15 +58,15 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register 'generateSource', GenerateSource, {
-            srcDirectory = project.file("$project.buildDir/generatedSrc/main/java/")
+            destDir = project.layout.buildDirectory.dir('generatedSrc')
         }
 
         project.tasks.register 'generateTestSource', GenerateTestSource, {
-            testDirectory = project.file("$project.buildDir/generatedSrc/test/groovy/component")
+            destDir = project.layout.buildDirectory.dir('generatedTestSrc')
         }
 
         project.tasks.register 'generateIntegrationTestSource', GenerateIntegrationTestSource, {
-            integrationTestDirectory = project.file("$project.buildDir/generatedSrc/integrationTest/groovy/component")
+            destDir = project.layout.buildDirectory.dir('generatedIntegrationTestSrc')
         }
 
         project.tasks.register 'generateConfig', GenerateConfig, {
@@ -76,17 +76,17 @@ class ComponentPlugin implements Plugin<Project> {
         project.sourceSets {
             main {
                 java {
-                    srcDirs += project.generateSource.srcDirectory.get()
+                    srcDirs += project.generateSource.destDir.get()
                 }
             }
             test {
                 groovy {
-                    srcDirs += project.generateTestSource.testDirectory.get()
+                    srcDirs += project.generateTestSource.destDir.get()
                 }
             }
             integrationTest {
                 groovy {
-                    srcDirs += project.generateIntegrationTestSource.integrationTestDirectory.get()
+                    srcDirs += project.generateIntegrationTestSource.destDir.get()
                 }
             }
         }

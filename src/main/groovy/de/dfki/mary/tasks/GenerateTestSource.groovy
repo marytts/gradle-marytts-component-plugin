@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskAction
 
 class GenerateTestSource extends DefaultTask {
     @OutputDirectory
-    final DirectoryProperty testDirectory = project.objects.directoryProperty()
+    final DirectoryProperty destDir = project.objects.directoryProperty()
 
     @TaskAction
     void generate() {
@@ -26,7 +26,7 @@ class GenerateTestSource extends DefaultTask {
 
         def templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigTest.groovy'))
         def template = engine.createTemplate(templateStream).make(binding + [assert_prop: assert_prop_str])
-        def configTestFile = new File(testDirectory.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}ConfigTest.groovy")
+        def configTestFile = new File(destDir.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}ConfigTest.groovy")
         configTestFile.parentFile.mkdirs()
         configTestFile.text = template.toString()
     }

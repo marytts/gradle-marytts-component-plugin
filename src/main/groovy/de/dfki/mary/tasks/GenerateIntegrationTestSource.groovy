@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskAction
 
 class GenerateIntegrationTestSource extends DefaultTask {
     @OutputDirectory
-    final DirectoryProperty integrationTestDirectory = project.objects.directoryProperty()
+    final DirectoryProperty destDir = project.objects.directoryProperty()
 
     @TaskAction
     void generate() {
@@ -27,7 +27,7 @@ class GenerateIntegrationTestSource extends DefaultTask {
 
         def templateStream = new InputStreamReader(getClass().getResourceAsStream('IntegrationTest.groovy'))
         def template = engine.createTemplate(templateStream).make(binding + [assert_prop: assert_prop_str])
-        def integrationTestFile = new File(integrationTestDirectory.get().asFile, "${project.marytts.component.packagePath}/Load${project.marytts.component.name}IT.groovy")
+        def integrationTestFile = new File(destDir.get().asFile, "${project.marytts.component.packagePath}/Load${project.marytts.component.name}IT.groovy")
         integrationTestFile.parentFile.mkdirs()
         integrationTestFile.text = template.toString()
     }

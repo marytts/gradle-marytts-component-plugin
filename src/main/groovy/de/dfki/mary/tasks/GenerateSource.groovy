@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskAction
 
 class GenerateSource extends DefaultTask {
     @OutputDirectory
-    final DirectoryProperty srcDirectory = project.objects.directoryProperty()
+    final DirectoryProperty destDir = project.objects.directoryProperty()
 
     @TaskAction
     void generate() {
@@ -17,7 +17,7 @@ class GenerateSource extends DefaultTask {
 
         def templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.java'))
         def template = engine.createTemplate(templateStream).make(binding)
-        def configClassFile = new File(srcDirectory.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}Config.java")
+        def configClassFile = new File(destDir.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}Config.java")
         configClassFile.parentFile.mkdirs()
         configClassFile.text = template.toString()
     }
