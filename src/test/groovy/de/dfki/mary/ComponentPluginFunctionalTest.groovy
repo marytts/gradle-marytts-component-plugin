@@ -59,7 +59,7 @@ class ComponentPluginFunctionalTest {
                 ['generateSource', true],
                 ['generateConfig', true],
                 ['processResources', true],
-                ['compileGroovy', true],
+                ['compileJava', true],
                 ['compileTestGroovy', true],
                 ['test', false],
                 ['integrationTest', false],

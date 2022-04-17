@@ -43,10 +43,10 @@ task testProcessResources {
     }
 }
 
-task testCompileGroovy {
-    dependsOn compileGroovy
+task testCompileJava {
+    dependsOn compileJava
     doLast {
-        assert fileTree(sourceSets.main.groovy.outputDir).contains(file("$buildDir/classes/groovy/main/$componentPackagePath/${componentName}Config.class"))
+        assert fileTree(sourceSets.main.java.classesDirectory).contains(file("$buildDir/classes/java/main/$componentPackagePath/${componentName}Config.class"))
     }
 }
 

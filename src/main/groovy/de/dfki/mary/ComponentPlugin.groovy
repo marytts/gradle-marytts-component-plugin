@@ -44,10 +44,10 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.dependencies {
-            implementation localGroovy()
             api group: 'de.dfki.mary', name: 'marytts-runtime', version: project.marytts.version, {
                 exclude group: '*', module: 'groovy-all'
             }
+            testImplementation localGroovy()
             testImplementation group: 'org.testng', name: 'testng', version: '7.5'
         }
 
@@ -67,7 +67,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.sourceSets {
             main {
-                groovy {
+                java {
                     srcDirs += project.generateSource.srcDirectory.get()
                 }
             }
