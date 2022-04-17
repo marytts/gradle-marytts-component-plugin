@@ -57,6 +57,8 @@ class ComponentPluginFunctionalTest {
                 ['testConfig', false],
                 ['generateServiceLoader', true],
                 ['generateSource', true],
+                ['generateTestSource', true],
+                ['generateIntegrationTestSource', true],
                 ['generateConfig', true],
                 ['processResources', true],
                 ['compileJava', true],

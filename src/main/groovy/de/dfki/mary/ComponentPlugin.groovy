@@ -1,8 +1,10 @@
 package de.dfki.mary
 
 import de.dfki.mary.tasks.GenerateConfig
+import de.dfki.mary.tasks.GenerateIntegrationTestSource
 import de.dfki.mary.tasks.GenerateServiceLoader
 import de.dfki.mary.tasks.GenerateSource
+import de.dfki.mary.tasks.GenerateTestSource
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -57,7 +59,13 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.tasks.register 'generateSource', GenerateSource, {
             srcDirectory = project.file("$project.buildDir/generatedSrc/main/java/")
+        }
+
+        project.tasks.register 'generateTestSource', GenerateTestSource, {
             testDirectory = project.file("$project.buildDir/generatedSrc/test/groovy/component")
+        }
+
+        project.tasks.register 'generateIntegrationTestSource', GenerateIntegrationTestSource, {
             integrationTestDirectory = project.file("$project.buildDir/generatedSrc/integrationTest/groovy/component")
         }
 
@@ -73,12 +81,12 @@ class ComponentPlugin implements Plugin<Project> {
             }
             test {
                 groovy {
-                    srcDirs += project.generateSource.testDirectory.get()
+                    srcDirs += project.generateTestSource.testDirectory.get()
                 }
             }
             integrationTest {
                 groovy {
-                    srcDirs += project.generateSource.integrationTestDirectory.get()
+                    srcDirs += project.generateIntegrationTestSource.integrationTestDirectory.get()
                 }
             }
         }
