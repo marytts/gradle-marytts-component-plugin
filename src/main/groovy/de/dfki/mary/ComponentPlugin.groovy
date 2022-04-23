@@ -49,6 +49,11 @@ class ComponentPlugin implements Plugin<Project> {
             testImplementation group: 'org.testng', name: 'testng', version: '7.5'
         }
 
+        project.tasks.register('unpackSourceTemplates', UnpackSourceTemplates) {
+            resourceNames = ['ConfigClass.java']
+            destDir = project.layout.buildDirectory.dir('sourceTemplates')
+        }
+
         project.tasks.register 'generateServiceLoader', GenerateServiceLoader, {
             destFile = project.layout.buildDirectory.file('serviceLoader.txt')
         }

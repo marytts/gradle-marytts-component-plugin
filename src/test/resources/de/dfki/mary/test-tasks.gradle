@@ -12,6 +12,13 @@ task testExtension {
     }
 }
 
+task testUnpackSourceTemplates {
+    dependsOn unpackSourceTemplates
+    doLast {
+        assert file("$buildDir/sourceTemplates/ConfigClass.java").exists()
+    }
+}
+
 task testGenerateServiceLoader {
     dependsOn generateServiceLoader
     doLast {

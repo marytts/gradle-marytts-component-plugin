@@ -55,6 +55,7 @@ class ComponentPluginFunctionalTest {
                 ['testPlugins', false],
                 ['testExtension', false],
                 ['testConfig', false],
+                ['unpackSourceTemplates', true],
                 ['generateServiceLoader', true],
                 ['generateSource', true],
                 ['generateTestSource', true],
