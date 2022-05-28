@@ -13,8 +13,8 @@ endif::[]
 :java-library-plugin: https://docs.gradle.org/current/userguide/java_library_plugin.html
 :gradle: https://gradle.org/
 :groovy-plugin: https://docs.gradle.org/current/userguide/groovy_plugin.html
-:jcenter: https://bintray.com/bintray/jcenter
 :marytts: http://mary.dfki.de/
+:mavenCentral: https://search.maven.org/
 :testng: https://testng.org/
 
 = Gradle MaryTTS Component Plugin
@@ -36,7 +36,7 @@ This plugin, when applied to a project, configures it as follows:
 
 . The {java-library-plugin}[Java Library] and {groovy-plugin}[Groovy] plugins are applied
 . Compatibility is set to Java 8
-. The {jcenter}[JCenter] repository is added
+. The {mavenCentral}[Maven Central] repository is added, as well as DFKI's MLT repository (to resolve the JTok dependency)
 . Integration tests are set up via the `integrationTest` source set and task
 . Testing is enabled using {testng}[TestNG]
 
