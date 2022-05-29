@@ -20,11 +20,22 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.extensions.create 'marytts', MaryttsExtension, project
         project.marytts {
-            version = "5.2"
+            version = "5.2.1"
         }
 
         project.repositories {
-            jcenter()
+            mavenCentral()
+            exclusiveContent {
+                forRepository {
+                    maven {
+                        name 'DFKI-MLT'
+                        url 'https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local'
+                    }
+                }
+                filter {
+                    includeGroup 'de.dfki.lt.jtok'
+                }
+            }
         }
 
         project.sourceSets {
@@ -44,6 +55,8 @@ class ComponentPlugin implements Plugin<Project> {
         project.dependencies {
             api group: 'de.dfki.mary', name: 'marytts-runtime', version: project.marytts.version, {
                 exclude group: '*', module: 'groovy-all'
+                exclude group: 'com.twmacinta', module: 'fast-md5'
+                exclude group: 'gov.nist.math', module: 'Jampack'
             }
             testImplementation localGroovy()
             testImplementation group: 'org.testng', name: 'testng', version: '7.5'
