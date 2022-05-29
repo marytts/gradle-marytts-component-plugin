@@ -12,18 +12,32 @@ task testExtension {
     }
 }
 
-task testUnpackSourceTemplates {
-    dependsOn unpackSourceTemplates
-    doLast {
-        assert file("$buildDir/sourceTemplates/ConfigClass.java").exists()
-    }
-}
-
 task testGenerateServiceLoader {
     dependsOn generateServiceLoader
     doLast {
         assert file("$buildDir/serviceLoader.txt").exists()
         assert file("$buildDir/serviceLoader.txt").text == "${componentPackageName}.${componentName}Config"
+    }
+}
+
+task testUnpackSourceTemplates {
+    dependsOn unpackSourceTemplates
+    doLast {
+        assert file("$buildDir/unpackedSrcTemplates/ConfigClass.java").exists()
+    }
+}
+
+task testUnpackTestSourceTemplates {
+    dependsOn unpackTestSourceTemplates
+    doLast {
+        assert file("$buildDir/unpackedTestSrcTemplates/ConfigTest.groovy").exists()
+    }
+}
+
+task testUnpackIntegrationTestSourceTemplates {
+    dependsOn unpackIntegrationTestSourceTemplates
+    doLast {
+        assert file("$buildDir/unpackedIntegrationTestSrcTemplates/IntegrationTest.groovy").exists()
     }
 }
 

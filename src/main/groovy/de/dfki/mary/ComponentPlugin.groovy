@@ -62,13 +62,23 @@ class ComponentPlugin implements Plugin<Project> {
             testImplementation group: 'org.testng', name: 'testng', version: '7.5'
         }
 
-        project.tasks.register('unpackSourceTemplates', UnpackSourceTemplates) {
-            resourceNames = ['ConfigClass.java']
-            destDir = project.layout.buildDirectory.dir('sourceTemplates')
-        }
-
         project.tasks.register 'generateServiceLoader', GenerateServiceLoader, {
             destFile = project.layout.buildDirectory.file('serviceLoader.txt')
+        }
+
+        project.tasks.register('unpackSourceTemplates', UnpackSourceTemplates) {
+            resourceNames = ['ConfigClass.java']
+            destDir = project.layout.buildDirectory.dir('unpackedSrcTemplates')
+        }
+
+        project.tasks.register('unpackTestSourceTemplates', UnpackSourceTemplates) {
+            resourceNames = ['ConfigTest.groovy']
+            destDir = project.layout.buildDirectory.dir('unpackedTestSrcTemplates')
+        }
+
+        project.tasks.register('unpackIntegrationTestSourceTemplates', UnpackSourceTemplates) {
+            resourceNames = ['IntegrationTest.groovy']
+            destDir = project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
         }
 
         def generateSourceTask = project.tasks.register 'generateSource', GenerateSource, {
