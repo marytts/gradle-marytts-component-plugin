@@ -138,7 +138,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.tasks.register 'testReports', TestReport, {
             reportOn project.tasks.withType(Test)
-            destinationDir = project.file("$project.testReportDir/all")
+            destinationDirectory = project.file("$project.testReportDir/all")
         }
 
         project.tasks.named('check').configure {
