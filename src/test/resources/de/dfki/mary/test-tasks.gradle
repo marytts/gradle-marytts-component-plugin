@@ -44,21 +44,33 @@ task testUnpackIntegrationTestSourceTemplates {
 task testGenerateSource {
     dependsOn generateSource
     doLast {
-        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/$componentPackagePath/${componentName}Config.java"))
+        def generatedFile = file("$buildDir/generatedSrc/$componentPackagePath/${componentName}Config.java")
+        assert sourceSets.main.allSource.contains(generatedFile)
+        def expected = file(generatedFile.name).text
+        def actual = generatedFile.text
+        assert actual == expected
     }
 }
 
 task testGenerateTestSource {
     dependsOn generateTestSource
     doLast {
-        assert sourceSets.test.allSource.contains(file("$buildDir/generatedTestSrc/$componentPackagePath/${componentName}ConfigTest.groovy"))
+        def generatedFile = file("$buildDir/generatedTestSrc/$componentPackagePath/${componentName}ConfigTest.groovy")
+        assert sourceSets.test.allSource.contains(generatedFile)
+        def expected = file(generatedFile.name).text
+        def actual = generatedFile.text
+        assert actual == expected
     }
 }
 
 task testGenerateIntegrationTestSource {
     dependsOn generateIntegrationTestSource
     doLast {
-        assert sourceSets.integrationTest.allSource.contains(file("$buildDir/generatedIntegrationTestSrc/$componentPackagePath/Load${componentName}IT.groovy"))
+        def generatedFile = file("$buildDir/generatedIntegrationTestSrc/$componentPackagePath/Load${componentName}IT.groovy")
+        assert sourceSets.integrationTest.allSource.contains(generatedFile)
+        def expected = file(generatedFile.name).text
+        def actual = generatedFile.text
+        assert actual == expected
     }
 }
 
