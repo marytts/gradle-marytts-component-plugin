@@ -36,12 +36,14 @@ class ComponentPluginFunctionalTest {
 
     @BeforeGroups(groups = 'default')
     void setupDefault() {
-        setupGradleAndProjectDir(false, 'build-with-defaults.gradle', 'test-tasks.gradle')
+        setupGradleAndProjectDir(false, 'build-with-defaults.gradle', 'test-tasks.gradle',
+                'MyComponentConfig.java', 'MyComponentConfigTest.groovy', 'LoadMyComponentIT.groovy')
     }
 
     @BeforeGroups(groups = 'custom')
     void setupCustom() {
-        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml')
+        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml',
+                'HelloConfig.java', 'HelloConfigTest.groovy', 'LoadHelloIT.groovy')
     }
 
     @BeforeGroups(groups = 'custom-legacy-gradle')
