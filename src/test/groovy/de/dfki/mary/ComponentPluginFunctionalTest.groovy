@@ -46,7 +46,7 @@ class ComponentPluginFunctionalTest {
 
     @BeforeGroups(groups = 'custom-legacy-gradle')
     void setupCustomLegacyGradle() {
-        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml')
+        setupCustom()
         gradle = gradle.withGradleVersion('5.1')
     }
 
