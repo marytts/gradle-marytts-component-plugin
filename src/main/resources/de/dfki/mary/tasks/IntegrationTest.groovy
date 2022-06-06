@@ -15,7 +15,13 @@ class Load${project.marytts.component.name}IT {
     @DataProvider
     Object[][] properties() {
         [
-$assert_prop
+${project.marytts.component.config.collect { key, value ->
+    if (value instanceof List)
+        "            ['$key" + ".list', " + value.inspect() + "]"
+    else
+        "            ['$key', '$value']"
+    }.findAll {!it.contains('locale') }.join(',\n')
+}
         ]
     }
 
