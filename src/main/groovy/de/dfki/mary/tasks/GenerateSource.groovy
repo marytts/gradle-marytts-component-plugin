@@ -6,19 +6,21 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 class GenerateSource extends DefaultTask {
+
     @OutputDirectory
     final DirectoryProperty destDir = project.objects.directoryProperty()
 
     @TaskAction
     void generate() {
-
-        def engine = new groovy.text.GStringTemplateEngine()
-        def binding = [project: project]
-
-        def templateStream = new InputStreamReader(getClass().getResourceAsStream('ConfigClass.java'))
-        def template = engine.createTemplate(templateStream).make(binding)
-        def configClassFile = new File(destDir.get().asFile, "${project.marytts.component.packagePath}/${project.marytts.component.name}Config.java")
-        configClassFile.parentFile.mkdirs()
-        configClassFile.text = template.toString()
+        project.copy {
+            into destDir
+            from project.tasks.findByName('unpackSourceTemplates')
+            eachFile { file ->
+                if (file.name == 'ConfigClass.java')
+                    file.name = "${project.marytts.component.name}Config.java"
+                file.path = "$project.marytts.component.packagePath/$file.name"
+            }
+            expand project.properties
+        }
     }
 }
