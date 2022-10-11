@@ -50,7 +50,7 @@ class ComponentDataTest {
     }
 
     @Test
-    void 'Given config, When defaults are used, value is correct'() {
+    void 'Given config, When defaults are used, Then value is correct'() {
         assert componentData.config == [:]
     }
 
