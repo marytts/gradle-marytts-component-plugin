@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    api group: 'org.yaml', name: 'snakeyaml', version: '1.30'
+    api group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     testImplementation group: 'org.testng', name: 'testng', version: '7.5'
 }
 
