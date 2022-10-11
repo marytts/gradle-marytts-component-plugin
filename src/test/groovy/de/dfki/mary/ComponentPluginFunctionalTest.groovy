@@ -15,10 +15,13 @@ class ComponentPluginFunctionalTest {
 
     GradleRunner gradle
 
-    void setupGradleAndProjectDir(boolean createCustomFiles, String... resourceNames) {
+    void setupGradleAndProjectDir(boolean createCustomFiles, String buildScriptResourceName, String... resourceNames) {
         def projectDir = File.createTempDir()
         new File(projectDir, 'settings.gradle').createNewFile()
         gradle = GradleRunner.create().withProjectDir(projectDir).withPluginClasspath().forwardOutput()
+        new File(projectDir, 'build.gradle').withWriter {
+            it << this.class.getResourceAsStream(buildScriptResourceName)
+        }
         resourceNames.each { resourceName ->
             new File(projectDir, resourceName).withWriter {
                 it << this.class.getResourceAsStream(resourceName)
@@ -33,17 +36,19 @@ class ComponentPluginFunctionalTest {
 
     @BeforeGroups(groups = 'default')
     void setupDefault() {
-        setupGradleAndProjectDir(false, 'build-with-defaults.gradle', 'test-tasks.gradle')
+        setupGradleAndProjectDir(false, 'build-with-defaults.gradle', 'test-tasks.gradle',
+                'MyComponentConfig.java', 'MyComponentConfigTest.groovy', 'LoadMyComponentIT.groovy')
     }
 
     @BeforeGroups(groups = 'custom')
     void setupCustom() {
-        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml')
+        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml',
+                'HelloConfig.java', 'HelloConfigTest.groovy', 'LoadHelloIT.groovy')
     }
 
     @BeforeGroups(groups = 'custom-legacy-gradle')
     void setupCustomLegacyGradle() {
-        setupGradleAndProjectDir(true, 'customized-build.gradle', 'test-tasks.gradle', 'config.yaml')
+        setupCustom()
         gradle = gradle.withGradleVersion('5.1')
     }
 
@@ -56,10 +61,15 @@ class ComponentPluginFunctionalTest {
                 ['testExtension', false],
                 ['testConfig', false],
                 ['generateServiceLoader', true],
+                ['unpackSourceTemplates', true],
+                ['unpackTestSourceTemplates', true],
+                ['unpackIntegrationTestSourceTemplates', true],
                 ['generateSource', true],
+                ['generateTestSource', true],
+                ['generateIntegrationTestSource', true],
                 ['generateConfig', true],
                 ['processResources', true],
-                ['compileGroovy', true],
+                ['compileJava', true],
                 ['compileTestGroovy', true],
                 ['test', false],
                 ['integrationTest', false],
@@ -67,8 +77,8 @@ class ComponentPluginFunctionalTest {
         ]
     }
 
-    void runGradleWithBuildFileAndTaskAndOptionalTestTask(String buildFileName, String taskName, boolean runTestTask) {
-        def gradleArgs = ['--warning-mode', 'all', '--build-file', buildFileName]
+    void runGradleWithBuildFileAndTaskAndOptionalTestTask(String taskName, boolean runTestTask) {
+        def gradleArgs = ['--warning-mode', 'all']
         def result = gradle.withArguments(gradleArgs + [taskName]).build()
         assert result.task(":$taskName").outcome in [SUCCESS, UP_TO_DATE]
         if (runTestTask) {
@@ -81,18 +91,18 @@ class ComponentPluginFunctionalTest {
 
     @Test(groups = 'default', dataProvider = 'taskNames')
     void defaultBuildTestTasks(String taskName, boolean runTestTask) {
-        runGradleWithBuildFileAndTaskAndOptionalTestTask('build-with-defaults.gradle', taskName, runTestTask)
+        runGradleWithBuildFileAndTaskAndOptionalTestTask(taskName, runTestTask)
     }
 
     @Test(groups = 'custom', dataProvider = 'taskNames')
     void customBuildTestTasks(String taskName, boolean runTestTask) {
-        runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
+        runGradleWithBuildFileAndTaskAndOptionalTestTask(taskName, runTestTask)
     }
 
     @Test(groups = 'custom-legacy-gradle', dataProvider = 'taskNames', expectedExceptions = UnexpectedBuildFailure.class)
     void customLegacyGradleBuildTestTasks(String taskName, boolean runTestTask) {
         try {
-            runGradleWithBuildFileAndTaskAndOptionalTestTask('customized-build.gradle', taskName, runTestTask)
+            runGradleWithBuildFileAndTaskAndOptionalTestTask(taskName, runTestTask)
         } catch (all) {
             if (JavaVersion.current() > JavaVersion.VERSION_12)
                 throw new SkipException(all.message)

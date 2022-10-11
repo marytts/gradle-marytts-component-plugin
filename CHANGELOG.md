@@ -4,12 +4,20 @@ Gradle MaryTTS Component Plugin
 [Unreleased]
 ------------
 
+### Added
+
+- Testing on Java 8, 11, 17
+
+### Removed
+
+- Runtime Groovy dependency
+
 ### Changed
 
-- Build with Gradle v7.4.2
-- Test on JDK 8, 11, 17
+- Build with Gradle v7.5.1
 - Upgraded plugins, dependencies
 - Migrated from Travis CI to GitHub Actions
+- Updated documentation
 - [all changes since v0.2.2]
 
 [v0.2.2] - 2020-06-26

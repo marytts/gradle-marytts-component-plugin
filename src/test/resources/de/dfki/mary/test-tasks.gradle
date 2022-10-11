@@ -20,12 +20,57 @@ task testGenerateServiceLoader {
     }
 }
 
+task testUnpackSourceTemplates {
+    dependsOn unpackSourceTemplates
+    doLast {
+        assert file("$buildDir/unpackedSrcTemplates/ConfigClass.java").exists()
+    }
+}
+
+task testUnpackTestSourceTemplates {
+    dependsOn unpackTestSourceTemplates
+    doLast {
+        assert file("$buildDir/unpackedTestSrcTemplates/ConfigTest.groovy").exists()
+    }
+}
+
+task testUnpackIntegrationTestSourceTemplates {
+    dependsOn unpackIntegrationTestSourceTemplates
+    doLast {
+        assert file("$buildDir/unpackedIntegrationTestSrcTemplates/IntegrationTest.groovy").exists()
+    }
+}
+
 task testGenerateSource {
     dependsOn generateSource
     doLast {
-        assert sourceSets.main.allSource.contains(file("$buildDir/generatedSrc/main/groovy/$componentPackagePath/${componentName}Config.groovy"))
-        assert sourceSets.test.allSource.contains(file("$buildDir/generatedSrc/test/groovy/component/$componentPackagePath/${componentName}ConfigTest.groovy"))
-        assert sourceSets.integrationTest.allSource.contains(file("$buildDir/generatedSrc/integrationTest/groovy/component/$componentPackagePath/Load${componentName}IT.groovy"))
+        def generatedFile = file("$buildDir/generatedSrc/$componentPackagePath/${componentName}Config.java")
+        assert sourceSets.main.allSource.contains(generatedFile)
+        def expected = file(generatedFile.name).text
+        def actual = generatedFile.text
+        assert actual == expected
+    }
+}
+
+task testGenerateTestSource {
+    dependsOn generateTestSource
+    doLast {
+        def generatedFile = file("$buildDir/generatedTestSrc/$componentPackagePath/${componentName}ConfigTest.groovy")
+        assert sourceSets.test.allSource.contains(generatedFile)
+        def expected = file(generatedFile.name).text
+        def actual = generatedFile.text
+        assert actual == expected
+    }
+}
+
+task testGenerateIntegrationTestSource {
+    dependsOn generateIntegrationTestSource
+    doLast {
+        def generatedFile = file("$buildDir/generatedIntegrationTestSrc/$componentPackagePath/Load${componentName}IT.groovy")
+        assert sourceSets.integrationTest.allSource.contains(generatedFile)
+        def expected = file(generatedFile.name).text
+        def actual = generatedFile.text
+        assert actual == expected
     }
 }
 
@@ -43,17 +88,17 @@ task testProcessResources {
     }
 }
 
-task testCompileGroovy {
-    dependsOn compileGroovy
+task testCompileJava {
+    dependsOn compileJava
     doLast {
-        assert fileTree(sourceSets.main.groovy.outputDir).contains(file("$buildDir/classes/groovy/main/$componentPackagePath/${componentName}Config.class"))
+        assert fileTree(sourceSets.main.java.classesDirectory).contains(file("$buildDir/classes/java/main/$componentPackagePath/${componentName}Config.class"))
     }
 }
 
 task testCompileTestGroovy {
     dependsOn compileTestGroovy
     doLast {
-        assert fileTree(sourceSets.test.groovy.outputDir).contains(file("$buildDir/classes/groovy/test/$componentPackagePath/${componentName}ConfigTest.class"))
+        assert fileTree(sourceSets.test.groovy.classesDirectory).contains(file("$buildDir/classes/groovy/test/$componentPackagePath/${componentName}ConfigTest.class"))
     }
 }
 

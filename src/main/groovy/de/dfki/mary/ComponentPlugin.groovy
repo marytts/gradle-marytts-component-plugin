@@ -2,12 +2,13 @@ package de.dfki.mary
 
 import de.dfki.mary.tasks.GenerateConfig
 import de.dfki.mary.tasks.GenerateServiceLoader
-import de.dfki.mary.tasks.GenerateSource
+import de.dfki.mary.tasks.UnpackSourceTemplates
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.api.plugins.JavaLibraryPlugin
+import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestReport
 
@@ -55,12 +56,12 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.dependencies {
-            implementation localGroovy()
             api group: 'de.dfki.mary', name: 'marytts-runtime', version: project.marytts.version, {
                 exclude group: '*', module: 'groovy-all'
                 exclude group: 'com.twmacinta', module: 'fast-md5'
                 exclude group: 'gov.nist.math', module: 'Jampack'
             }
+            testImplementation localGroovy()
             testImplementation group: 'org.testng', name: 'testng', version: '7.5'
         }
 
@@ -68,10 +69,52 @@ class ComponentPlugin implements Plugin<Project> {
             destFile = project.layout.buildDirectory.file('serviceLoader.txt')
         }
 
-        project.tasks.register 'generateSource', GenerateSource, {
-            srcDirectory = project.file("$project.buildDir/generatedSrc/main/groovy/")
-            testDirectory = project.file("$project.buildDir/generatedSrc/test/groovy/component")
-            integrationTestDirectory = project.file("$project.buildDir/generatedSrc/integrationTest/groovy/component")
+        def unpackSourceTemplatesTask = project.tasks.register('unpackSourceTemplates', UnpackSourceTemplates) {
+            resourceNames = ['ConfigClass.java']
+            destDir = project.layout.buildDirectory.dir('unpackedSrcTemplates')
+        }
+
+        def unpackTestSourceTemplatesTask = project.tasks.register('unpackTestSourceTemplates', UnpackSourceTemplates) {
+            resourceNames = ['ConfigTest.groovy']
+            destDir = project.layout.buildDirectory.dir('unpackedTestSrcTemplates')
+        }
+
+        def unpackIntegrationTestSourceTemplatesTask = project.tasks.register('unpackIntegrationTestSourceTemplates', UnpackSourceTemplates) {
+            resourceNames = ['IntegrationTest.groovy']
+            destDir = project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
+        }
+
+        def generateSourceTask = project.tasks.register 'generateSource', Copy, {
+            into project.layout.buildDirectory.dir('generatedSrc')
+            from unpackSourceTemplatesTask
+            eachFile { file ->
+                if (file.name == 'ConfigClass.java')
+                    file.name = "${project.marytts.component.name}Config.java"
+                file.path = "$project.marytts.component.packagePath/$file.name"
+            }
+            expand project.properties
+        }
+
+        def generateTestSourceTask = project.tasks.register 'generateTestSource', Copy, {
+            into project.layout.buildDirectory.dir('generatedTestSrc')
+            from unpackTestSourceTemplatesTask
+            eachFile { file ->
+                if (file.name == 'ConfigTest.groovy')
+                    file.name = "${project.marytts.component.name}ConfigTest.groovy"
+                file.path = "$project.marytts.component.packagePath/$file.name"
+            }
+            expand project.properties
+        }
+
+        def generateIntegrationTestSourceTask = project.tasks.register 'generateIntegrationTestSource', Copy, {
+            into project.layout.buildDirectory.dir('generatedIntegrationTestSrc')
+            from unpackIntegrationTestSourceTemplatesTask
+            eachFile { file ->
+                if (file.name == 'IntegrationTest.groovy')
+                    file.name = "Load${project.marytts.component.name}IT.groovy"
+                file.path = "$project.marytts.component.packagePath/$file.name"
+            }
+            expand project.properties
         }
 
         project.tasks.register 'generateConfig', GenerateConfig, {
@@ -79,21 +122,9 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.sourceSets {
-            main {
-                groovy {
-                    srcDirs += project.generateSource.srcDirectory.get()
-                }
-            }
-            test {
-                groovy {
-                    srcDirs += project.generateSource.testDirectory.get()
-                }
-            }
-            integrationTest {
-                groovy {
-                    srcDirs += project.generateSource.integrationTestDirectory.get()
-                }
-            }
+            main.java.srcDir generateSourceTask
+            test.groovy.srcDir generateTestSourceTask
+            integrationTest.groovy.srcDir generateIntegrationTestSourceTask
         }
 
         project.processResources {
@@ -131,7 +162,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.tasks.register 'testReports', TestReport, {
             reportOn project.tasks.withType(Test)
-            destinationDir = project.file("$project.testReportDir/all")
+            destinationDirectory = project.file("$project.testReportDir/all")
         }
 
         project.tasks.named('check').configure {

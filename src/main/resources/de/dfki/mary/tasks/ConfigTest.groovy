@@ -24,6 +24,12 @@ class ${project.marytts.component.name}ConfigTest {
 
     @Test
     public void canGetProperties() {
-$assert_prop
+${project.marytts.component.config.collect { key, value ->
+    if (value instanceof List)
+        "        assert config.properties.'$key" + ".list'.tokenize().containsAll(" + value.inspect() + ")"
+    else
+        "        assert config.properties.'$key' == '$value'"
+}.join('\n')
+        }
     }
 }

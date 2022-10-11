@@ -55,34 +55,31 @@ This plugin adds a `marytts.component` extension, which is configured like this:
 ----
 marytts {
     component {
-        name = 'Fnord' // <1>
-        packageName = 'fnord.stuff' // <2>
+        name = 'Hello' // <1>
+        packageName = 'my.world' // <2>
     }
 }
 ----
 <1> Custom component name
 <2> Custom package name
 
-This will generate the *config* file, *service loader*, and *boilerplate Groovy* source code to test and use this component with MaryTTS:
+This will generate the *config* file, *service loader*, and *boilerplate Groovy and Java* source code to test and use, respectively, this component with MaryTTS:
 
 [source]
 ----
-build/generatedSrc/
-├── integrationTest
-│   └── groovy
-│       └── fnord # <1>
-│           └── stuff
-│               └── LoadFnordIT.groovy # <2>
-├── main
-│   └── groovy
-│       └── fnord # <1>
-│           └── stuff
-│               └── FnordConfig.groovy # <2>
-└── test
-    └── groovy
-        └── fnord # <1>
-            └── stuff
-                └── FnordConfigTest.groovy # <2>
+build
+├── generatedIntegrationTestSrc
+│   └── my # <1>
+│       └── world
+│           └── LoadHelloIT.groovy # <2>
+├── generatedSrc
+│   └── my # <1>
+│       └── world
+│           └── HelloConfig.java # <2>
+└── generatedTestSrc
+    └── my # <1>
+        └── world
+            └── HelloConfigTest.groovy # <2>
 ----
 <1> Custom package path
 <2> Class names derived from custom component name
@@ -107,23 +104,20 @@ IMPORTANT: If a YAML file is specified, it must be readable and valid, otherwise
 ----
 # A comment
 
-name: fnord
-locale: &locale xy # <1>
+locale: xy
 
-fnord:
-    stuff: # <2>
-        locale: *locale # <1>
+foo:
+    bar: foo baz # <1>
 
-    others: # <3>
-    - one thingie
-    - another one
+    qux: # <2>
+    - quux
+    - quuux
 
-    some.resource: jar:/path/to/the/resource # <4>
+    fnord: 'jar:/path/to/the/fnord' # <3>
 ----
-<1> You can use YAML *anchors* and *references* to avoid redundancy!
-<2> Nested config keys will be flattened.
-<3> A list will be converted to a config property with a trailing `.list`.
-<4> A value with a `jar:` prefix will be treated as a classpath resource when the component runs in MaryTTS.
+<1> Nested config keys will be flattened.
+<2> A list will be converted to a config property with a trailing `.list`.
+<3> A value with a `jar:` prefix (which should be quoted in YAML) will be treated as a classpath resource when the component runs in MaryTTS.
 
 === Generated config
 [[generated-config]]
@@ -132,13 +126,12 @@ The above YAML config will generate a configuration like this:
 
 [source]
 ----
-name = fnord
 locale = xy
-fnord.stuff.locale = xy
-fnord.others.list = \
-    one thingie \
-    another one
-fnord.some.resource = jar:/path/to/the/resource
+foo.bar = foo baz
+foo.qux.list = \
+    quux \
+    quuux
+foo.fnord = jar:/path/to/the/fnord
 ----
 
 === Generated test code
@@ -147,21 +140,21 @@ fnord.some.resource = jar:/path/to/the/resource
 Groovy source code for unit and integration testing with {testng}[TestNG] will be generated to verify that the component can be loaded, and that all configured properties have the expected values.
 Any resources will be loaded as streams to ensure they exist on the classpath.
 
-.FnordConfigTest.groovy
+.HelloConfigTest.groovy
 [source,groovy]
 ----
-package fnord.stuff
+package my.world
 
 import marytts.config.*
 import org.testng.annotations.*
 
-class FnordConfigTest {
+class HelloConfigTest {
 
-    FnordConfig config
+    HelloConfig config
 
     @BeforeMethod
     void setup() {
-        config = new FnordConfig()
+        config = new HelloConfig()
     }
 
     @Test
@@ -176,27 +169,26 @@ class FnordConfigTest {
 
     @Test
     public void canGetProperties() { // <1>
-        assert config.properties.'name' == 'fnord'
         assert config.properties.'locale' == 'xy'
-        assert config.properties.'fnord.stuff.locale' == 'xy'
-        assert config.properties.'fnord.others.list'.tokenize().containsAll(['one thingie', 'another one'])
-        assert config.properties.'fnord.some.resource' == 'jar:/path/to/the/resource'
+        assert config.properties.'foo.bar' == 'foo baz'
+        assert config.properties.'foo.qux.list'.tokenize().containsAll(['quux', 'quuux'])
+        assert config.properties.'foo.fnord' == 'jar:/path/to/the/fnord'
     }
 }
 ----
 <1> Assertions generated from config
 
-.LoadFnordIT.groovy
+.LoadHelloIT.groovy
 [source,groovy]
 ----
-package fnord.stuff
+package my.world
 
 import marytts.server.MaryProperties
 import marytts.util.MaryRuntimeUtils
 
 import org.testng.annotations.*
 
-class LoadFnordIT {
+class LoadHelloIT {
 
     @BeforeMethod
     void setup() {
@@ -206,9 +198,9 @@ class LoadFnordIT {
     @DataProvider
     Object[][] properties() {
         [ // <1>
-            ['fnord.stuff.locale', 'xy'],
-            ['fnord.others.list', ['one thingie', 'another one']],
-            ['fnord.some.resource', 'jar:/path/to/the/resource']
+            ['foo.bar', 'foo baz'],
+            ['foo.qux.list', ['quux', 'quuux']],
+            ['foo.fnord', 'jar:/path/to/the/fnord']
         ]
     }
 

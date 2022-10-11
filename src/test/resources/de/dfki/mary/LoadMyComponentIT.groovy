@@ -1,11 +1,11 @@
-package $project.marytts.component.packageName
+package mypackage
 
 import marytts.server.MaryProperties
 import marytts.util.MaryRuntimeUtils
 
 import org.testng.annotations.*
 
-class Load${project.marytts.component.name}IT {
+class LoadMyComponentIT {
 
     @BeforeMethod
     void setup() {
@@ -15,13 +15,7 @@ class Load${project.marytts.component.name}IT {
     @DataProvider
     Object[][] properties() {
         [
-${project.marytts.component.config.collect { key, value ->
-    if (value instanceof List)
-        "            ['$key" + ".list', " + value.inspect() + "]"
-    else
-        "            ['$key', '$value']"
-    }.findAll {!it.contains('locale') }.join(',\n')
-}
+
         ]
     }
 
@@ -29,7 +23,7 @@ ${project.marytts.component.config.collect { key, value ->
     public void canGetProperty(name, expected) {
         def actual
         switch (name) {
-            case ~/.+\\.list\$/:
+            case ~/.+\.list$/:
                 actual = MaryProperties.getList(name)
                 assert actual.containsAll(expected)
                 break
@@ -38,7 +32,7 @@ ${project.marytts.component.config.collect { key, value ->
                 assert expected == actual
                 break
         }
-        if ("\$expected".startsWith('jar:')) {
+        if ("$expected".startsWith('jar:')) {
             assert MaryProperties.getStream(name)
         }
     }
