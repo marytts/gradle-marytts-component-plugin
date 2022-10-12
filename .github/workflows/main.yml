@@ -46,7 +46,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Generate coverage report, send to Coveralls
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 8
+
+      - uses: gradle/gradle-build-action@v2
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: ./gradlew jacocoTestReport coveralls
+        with:
+          arguments: jacocoTestReport coveralls
