@@ -1,5 +1,4 @@
 image:https://github.com/marytts/gradle-marytts-component-plugin/actions/workflows/main.yml/badge.svg["CI", link="https://github.com/marytts/gradle-marytts-component-plugin/actions/workflows/main.yml"]
-image:https://coveralls.io/repos/github/marytts/gradle-marytts-component-plugin/badge.svg?branch=master["Coverage Status", link="https://coveralls.io/github/marytts/gradle-marytts-component-plugin?branch=master"]
 image:https://img.shields.io/badge/License-LGPL%20v3-blue.svg["License: LGPL v3",link="https://www.gnu.org/licenses/lgpl-3.0"]
 
 ifdef::env-github[]

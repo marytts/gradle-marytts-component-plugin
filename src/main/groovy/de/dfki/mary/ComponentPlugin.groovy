@@ -161,7 +161,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register 'testReports', TestReport, {
-            reportOn project.tasks.withType(Test)
+            testResults.from project.tasks.withType(Test).collect { it.binaryResultsDirectory }
             destinationDirectory = project.file("$project.testReportDir/all")
         }
 
