@@ -1,8 +1,8 @@
 Gradle MaryTTS Component Plugin
 ===============================
 
-[Unreleased]
-------------
+[v0.3.0] - 2022-11-23
+---------------------
 
 ### Added
 
@@ -64,7 +64,7 @@ Gradle MaryTTS Component Plugin
 
 Initial release
 
-[Unreleased]: https://github.com/marytts/gradle-marytts-component-plugin/tree/master
+[v0.3.0]: https://github.com/marytts/gradle-marytts-component-plugin/releases/tag/v0.3.0
 [all changes since v0.2.2]: https://github.com/marytts/gradle-marytts-component-plugin/compare/v0.2.2...HEAD
 [v0.2.2]: https://github.com/marytts/gradle-marytts-component-plugin/releases/tag/v0.2.2
 [all changes since v0.2.1]: https://github.com/marytts/gradle-marytts-component-plugin/compare/v0.2.1...v0.2.2
