@@ -10,6 +10,20 @@ group 'de.dfki.mary'
 version '0.3.0-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
 
+pluginBundle {
+    def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
+    website = url
+    vcsUrl = url
+    description = project.description
+    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
+
+    plugins {
+        componentPlugin {
+            displayName = 'Gradle MaryTTS Component Plugin'
+        }
+    }
+}
+
 gradlePlugin {
     plugins {
         componentPlugin {
@@ -58,21 +72,6 @@ jacocoTestReport {
     dependsOn test
     reports.xml.required = true
 }
-
-pluginBundle {
-    def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
-    website = url
-    vcsUrl = url
-    description = project.description
-    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
-
-    plugins {
-        componentPlugin {
-            displayName = 'Gradle MaryTTS Component Plugin'
-        }
-    }
-}
-
 
 publishing {
     afterEvaluate {
