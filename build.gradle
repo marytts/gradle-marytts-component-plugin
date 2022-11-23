@@ -7,6 +7,7 @@ plugins {
 group 'de.dfki.mary'
 version '0.3.0-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
+ext.isReleaseVersion = !version.endsWith('-SNAPSHOT')
 
 pluginBundle {
     def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
@@ -104,21 +105,10 @@ publishing {
     }
     repositories {
         maven {
-            name 'Project'
-            url "$rootProject.buildDir/repo"
-        }
-        maven {
-            if (version.endsWith('-SNAPSHOT')) {
-                name 'OJO'
-                url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
-            } else {
-                name 'JCenter'
-                url 'https://api.bintray.com/maven/marytts/marytts/gradle-marytts-component-plugin'
-            }
-            credentials {
-                username = findProperty('bintrayUser')
-                password = findProperty('bintrayApiKey')
-            }
+            name 'OSSRH'
+            url isReleaseVersion ? 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    : 'https://oss.sonatype.org/content/repositories/snapshots'
+            credentials(PasswordCredentials)
         }
     }
 }
