@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'de.dfki.mary'
-version '0.3.0-SNAPSHOT'
+version '0.4.0-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
 ext.isReleaseVersion = !version.endsWith('-SNAPSHOT')
 
