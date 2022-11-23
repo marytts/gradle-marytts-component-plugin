@@ -11,13 +11,16 @@ Gradle MaryTTS Component Plugin
 ### Removed
 
 - Runtime Groovy dependency
+- Reliance on Bintray/JCenter
 
 ### Changed
 
 - Build with Gradle v7.5.1
 - Upgraded plugins, dependencies
 - Migrated from Travis CI to GitHub Actions
+- Upgraded MaryTTS to v5.2.1
 - Updated documentation
+- Migrated publishing from OJO to OSSRH
 - [all changes since v0.2.2]
 
 [v0.2.2] - 2020-06-26
