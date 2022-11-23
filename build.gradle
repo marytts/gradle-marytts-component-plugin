@@ -1,9 +1,7 @@
 plugins {
-    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '1.1.0'
     id 'groovy'
     id 'jacoco'
-    id 'com.gradle.plugin-publish'
-    id 'maven-publish'
 }
 
 group 'de.dfki.mary'
