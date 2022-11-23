@@ -1,20 +1,29 @@
 plugins {
-    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '1.1.0'
     id 'groovy'
     id 'jacoco'
-    id 'com.gradle.plugin-publish'
-    id 'maven-publish'
+    id 'signing'
 }
 
 group 'de.dfki.mary'
-version '0.3-SNAPSHOT'
+version '0.3.0-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
+ext.isReleaseVersion = !version.endsWith('-SNAPSHOT')
+
+pluginBundle {
+    def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
+    website = url
+    vcsUrl = url
+    description = project.description
+    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
+}
 
 gradlePlugin {
     plugins {
         componentPlugin {
             id = 'de.dfki.mary.component'
             implementationClass = 'de.dfki.mary.ComponentPlugin'
+            displayName = 'Gradle MaryTTS Component Plugin'
         }
     }
 }
@@ -59,88 +68,52 @@ jacocoTestReport {
     reports.xml.required = true
 }
 
-pluginBundle {
-    def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
-    website = url
-    vcsUrl = url
-    description = project.description
-    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
-
-    plugins {
-        componentPlugin {
-            displayName = 'Gradle MaryTTS Component Plugin'
+publishing {
+    publications {
+        withType(MavenPublication) {
+            pom {
+                name = 'MaryTTS Component Plugin'
+                description = project.description
+                url = 'https://github.com/marytts/gradle-marytts-component-plugin'
+                inceptionYear = '2017'
+                organization {
+                    name = 'DFKI GmbH'
+                    url = 'https://dfki.de/'
+                }
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License v3.0'
+                        url = 'https://www.gnu.org/licenses/lgpl-3.0-standalone.html'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'Sébastien Le Maguer'
+                        url = 'https://github.com/seblemaguer'
+                    }
+                    developer {
+                        name = 'Ingmar Steiner'
+                        url = 'https://github.com/psibre'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/marytts/gradle-marytts-component-plugin.git'
+                    developerConnection = 'scm:git:git@github.com/marytts/gradle-marytts-component-plugin.git'
+                    url = 'https://github.com/marytts/gradle-marytts-component-plugin'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name 'OSSRH'
+            url isReleaseVersion ? 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    : 'https://oss.sonatype.org/content/repositories/snapshots'
+            credentials(PasswordCredentials)
         }
     }
 }
 
-
-publishing {
-    afterEvaluate {
-        publications {
-            withType(MavenPublication) {
-                pom {
-                    name = 'MaryTTS Component Plugin'
-                    description = 'A base plugin for every component developed for MaryTTS'
-                    url = 'https://github.com/marytts/gradle-marytts-component-plugin'
-                    inceptionYear = '2017'
-                    organization {
-                        name = 'DFKI GmbH'
-                        url = 'https://dfki.de/'
-                    }
-                    licenses {
-                        license {
-                            name = 'GNU Lesser General Public License v3.0'
-                            url = 'https://www.gnu.org/licenses/lgpl-3.0-standalone.html'
-                        }
-                    }
-                    developers {
-                        developer {
-                            name = 'Sébastien Le Maguer'
-                            url = 'https://github.com/seblemaguer'
-                        }
-                        developer {
-                            name = 'Ingmar Steiner'
-                            url = 'https://github.com/psibre'
-                        }
-                    }
-                    scm {
-                        connection = 'scm:git:https://github.com/marytts/gradle-marytts-component-plugin.git'
-                        developerConnection = 'scm:git:git@github.com/marytts/gradle-marytts-component-plugin.git'
-                        url = 'https://github.com/marytts/gradle-marytts-component-plugin'
-                    }
-                    issueManagement {
-                        system = 'GitHub'
-                        url = 'https://github.com/marytts/gradle-marytts-component-plugin/issues'
-                    }
-                    ciManagement {
-                        system = 'Travis CI'
-                        url = 'https://travis-ci.com/github/marytts/gradle-marytts-component-plugin'
-                    }
-                    distributionManagement {
-                        downloadUrl = 'https://bintray.com/marytts/gradle-marytts-component-plugin/marytts'
-                    }
-                }
-            }
-        }
-
-        repositories {
-            maven {
-                name 'Project'
-                url "$rootProject.buildDir/repo"
-            }
-            maven {
-                if (version.endsWith('-SNAPSHOT')) {
-                    name 'OJO'
-                    url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
-                } else {
-                    name 'JCenter'
-                    url 'https://api.bintray.com/maven/marytts/marytts/gradle-marytts-component-plugin'
-                }
-                credentials {
-                    username = findProperty('bintrayUser')
-                    password = findProperty('bintrayApiKey')
-                }
-            }
-        }
-    }
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
 }
