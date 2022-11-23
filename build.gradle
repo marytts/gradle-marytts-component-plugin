@@ -16,12 +16,6 @@ pluginBundle {
     vcsUrl = url
     description = project.description
     tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
-
-    plugins {
-        componentPlugin {
-            displayName = 'Gradle MaryTTS Component Plugin'
-        }
-    }
 }
 
 gradlePlugin {
@@ -29,6 +23,7 @@ gradlePlugin {
         componentPlugin {
             id = 'de.dfki.mary.component'
             implementationClass = 'de.dfki.mary.ComponentPlugin'
+            displayName = 'Gradle MaryTTS Component Plugin'
         }
     }
 }
