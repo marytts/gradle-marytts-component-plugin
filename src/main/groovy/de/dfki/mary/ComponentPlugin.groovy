@@ -16,12 +16,12 @@ class ComponentPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.pluginManager.apply JavaLibraryPlugin
-        project.pluginManager.apply GroovyPlugin
+        project.pluginManager.apply(JavaLibraryPlugin)
+        project.pluginManager.apply(GroovyPlugin)
 
         project.sourceCompatibility = JavaVersion.VERSION_1_8
 
-        project.extensions.create 'marytts', MaryttsExtension, project
+        project.extensions.create('marytts', MaryttsExtension, project)
         project.marytts {
             version = "5.2.1"
         }
@@ -65,26 +65,31 @@ class ComponentPlugin implements Plugin<Project> {
             testImplementation group: 'org.testng', name: 'testng', version: '7.5'
         }
 
-        project.tasks.register 'generateServiceLoader', GenerateServiceLoader, {
-            destFile = project.layout.buildDirectory.file('serviceLoader.txt')
+        project.tasks.register('generateServiceLoader', GenerateServiceLoader) {
+            group = 'MaryTTS Component'
+            destFile.set project.layout.buildDirectory.file('serviceLoader.txt')
         }
 
         def unpackSourceTemplatesTask = project.tasks.register('unpackSourceTemplates', UnpackSourceTemplates) {
-            resourceNames = ['ConfigClass.java']
-            destDir = project.layout.buildDirectory.dir('unpackedSrcTemplates')
+            group = 'MaryTTS Component'
+            resourceNames.add 'ConfigClass.java'
+            destDir.set project.layout.buildDirectory.dir('unpackedSrcTemplates')
         }
 
         def unpackTestSourceTemplatesTask = project.tasks.register('unpackTestSourceTemplates', UnpackSourceTemplates) {
-            resourceNames = ['ConfigTest.groovy']
-            destDir = project.layout.buildDirectory.dir('unpackedTestSrcTemplates')
+            group = 'MaryTTS Component'
+            resourceNames.add 'ConfigTest.groovy'
+            destDir.set project.layout.buildDirectory.dir('unpackedTestSrcTemplates')
         }
 
         def unpackIntegrationTestSourceTemplatesTask = project.tasks.register('unpackIntegrationTestSourceTemplates', UnpackSourceTemplates) {
-            resourceNames = ['IntegrationTest.groovy']
-            destDir = project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
+            group = 'MaryTTS Component'
+            resourceNames.add 'IntegrationTest.groovy'
+            destDir.set project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
         }
 
-        def generateSourceTask = project.tasks.register 'generateSource', Copy, {
+        def generateSourceTask = project.tasks.register('generateSource', Copy) {
+            group = 'MaryTTS Component'
             into project.layout.buildDirectory.dir('generatedSrc')
             from unpackSourceTemplatesTask
             eachFile { file ->
@@ -95,7 +100,8 @@ class ComponentPlugin implements Plugin<Project> {
             expand project.properties
         }
 
-        def generateTestSourceTask = project.tasks.register 'generateTestSource', Copy, {
+        def generateTestSourceTask = project.tasks.register('generateTestSource', Copy) {
+            group = 'MaryTTS Component'
             into project.layout.buildDirectory.dir('generatedTestSrc')
             from unpackTestSourceTemplatesTask
             eachFile { file ->
@@ -106,7 +112,8 @@ class ComponentPlugin implements Plugin<Project> {
             expand project.properties
         }
 
-        def generateIntegrationTestSourceTask = project.tasks.register 'generateIntegrationTestSource', Copy, {
+        def generateIntegrationTestSourceTask = project.tasks.register('generateIntegrationTestSource', Copy) {
+            group = 'MaryTTS Component'
             into project.layout.buildDirectory.dir('generatedIntegrationTestSrc')
             from unpackIntegrationTestSourceTemplatesTask
             eachFile { file ->
@@ -117,8 +124,9 @@ class ComponentPlugin implements Plugin<Project> {
             expand project.properties
         }
 
-        project.tasks.register 'generateConfig', GenerateConfig, {
-            destFile = project.layout.buildDirectory.file('generated.config')
+        project.tasks.register('generateConfig', GenerateConfig) {
+            group = 'MaryTTS Component'
+            destFile.set project.layout.buildDirectory.file('generated.config')
         }
 
         project.sourceSets {
@@ -142,9 +150,9 @@ class ComponentPlugin implements Plugin<Project> {
             dependsOn project.tasks.named('generateSource')
         }
 
-        project.tasks.register 'integrationTest', Test, {
-            group 'Verification'
-            description 'Runs the integration tests.'
+        project.tasks.register('integrationTest', Test) {
+            group = 'Verification'
+            description = 'Runs the integration tests.'
             workingDir = project.buildDir
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
             classpath = project.sourceSets.integrationTest.runtimeClasspath
@@ -153,14 +161,14 @@ class ComponentPlugin implements Plugin<Project> {
             shouldRunAfter project.tasks.named('test')
         }
 
-        project.tasks.withType(Test) {
+        project.tasks.withType(Test).configureEach {
             useTestNG()
             testLogging {
                 exceptionFormat = 'full'
             }
         }
 
-        project.tasks.register 'testReports', TestReport, {
+        project.tasks.register('testReports', TestReport) {
             testResults.from project.tasks.withType(Test).collect { it.binaryResultsDirectory }
             destinationDirectory = project.file("$project.testReportDir/all")
         }
