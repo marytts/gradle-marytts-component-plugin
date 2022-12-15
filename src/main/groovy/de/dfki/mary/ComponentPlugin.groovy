@@ -66,25 +66,30 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register('generateServiceLoader', GenerateServiceLoader) {
+            group = 'MaryTTS Component'
             destFile = project.layout.buildDirectory.file('serviceLoader.txt')
         }
 
         def unpackSourceTemplatesTask = project.tasks.register('unpackSourceTemplates', UnpackSourceTemplates) {
+            group = 'MaryTTS Component'
             resourceNames = ['ConfigClass.java']
             destDir = project.layout.buildDirectory.dir('unpackedSrcTemplates')
         }
 
         def unpackTestSourceTemplatesTask = project.tasks.register('unpackTestSourceTemplates', UnpackSourceTemplates) {
+            group = 'MaryTTS Component'
             resourceNames = ['ConfigTest.groovy']
             destDir = project.layout.buildDirectory.dir('unpackedTestSrcTemplates')
         }
 
         def unpackIntegrationTestSourceTemplatesTask = project.tasks.register('unpackIntegrationTestSourceTemplates', UnpackSourceTemplates) {
+            group = 'MaryTTS Component'
             resourceNames = ['IntegrationTest.groovy']
             destDir = project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
         }
 
         def generateSourceTask = project.tasks.register('generateSource', Copy) {
+            group = 'MaryTTS Component'
             into project.layout.buildDirectory.dir('generatedSrc')
             from unpackSourceTemplatesTask
             eachFile { file ->
@@ -96,6 +101,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         def generateTestSourceTask = project.tasks.register('generateTestSource', Copy) {
+            group = 'MaryTTS Component'
             into project.layout.buildDirectory.dir('generatedTestSrc')
             from unpackTestSourceTemplatesTask
             eachFile { file ->
@@ -107,6 +113,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         def generateIntegrationTestSourceTask = project.tasks.register('generateIntegrationTestSource', Copy) {
+            group = 'MaryTTS Component'
             into project.layout.buildDirectory.dir('generatedIntegrationTestSrc')
             from unpackIntegrationTestSourceTemplatesTask
             eachFile { file ->
@@ -118,6 +125,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register('generateConfig', GenerateConfig) {
+            group = 'MaryTTS Component'
             destFile = project.layout.buildDirectory.file('generated.config')
         }
 
@@ -143,7 +151,7 @@ class ComponentPlugin implements Plugin<Project> {
         }
 
         project.tasks.register('integrationTest', Test) {
-            group 'Verification'
+            group = 'Verification'
             description 'Runs the integration tests.'
             workingDir = project.buildDir
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
