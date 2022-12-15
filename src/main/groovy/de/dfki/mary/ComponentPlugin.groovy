@@ -16,12 +16,12 @@ class ComponentPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.pluginManager.apply JavaLibraryPlugin
-        project.pluginManager.apply GroovyPlugin
+        project.pluginManager.apply(JavaLibraryPlugin)
+        project.pluginManager.apply(GroovyPlugin)
 
         project.sourceCompatibility = JavaVersion.VERSION_1_8
 
-        project.extensions.create 'marytts', MaryttsExtension, project
+        project.extensions.create('marytts', MaryttsExtension, project)
         project.marytts {
             version = "5.2.1"
         }
@@ -65,7 +65,7 @@ class ComponentPlugin implements Plugin<Project> {
             testImplementation group: 'org.testng', name: 'testng', version: '7.5'
         }
 
-        project.tasks.register 'generateServiceLoader', GenerateServiceLoader, {
+        project.tasks.register('generateServiceLoader', GenerateServiceLoader) {
             destFile = project.layout.buildDirectory.file('serviceLoader.txt')
         }
 
@@ -84,7 +84,7 @@ class ComponentPlugin implements Plugin<Project> {
             destDir = project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
         }
 
-        def generateSourceTask = project.tasks.register 'generateSource', Copy, {
+        def generateSourceTask = project.tasks.register('generateSource', Copy) {
             into project.layout.buildDirectory.dir('generatedSrc')
             from unpackSourceTemplatesTask
             eachFile { file ->
@@ -95,7 +95,7 @@ class ComponentPlugin implements Plugin<Project> {
             expand project.properties
         }
 
-        def generateTestSourceTask = project.tasks.register 'generateTestSource', Copy, {
+        def generateTestSourceTask = project.tasks.register('generateTestSource', Copy) {
             into project.layout.buildDirectory.dir('generatedTestSrc')
             from unpackTestSourceTemplatesTask
             eachFile { file ->
@@ -106,7 +106,7 @@ class ComponentPlugin implements Plugin<Project> {
             expand project.properties
         }
 
-        def generateIntegrationTestSourceTask = project.tasks.register 'generateIntegrationTestSource', Copy, {
+        def generateIntegrationTestSourceTask = project.tasks.register('generateIntegrationTestSource', Copy) {
             into project.layout.buildDirectory.dir('generatedIntegrationTestSrc')
             from unpackIntegrationTestSourceTemplatesTask
             eachFile { file ->
@@ -117,7 +117,7 @@ class ComponentPlugin implements Plugin<Project> {
             expand project.properties
         }
 
-        project.tasks.register 'generateConfig', GenerateConfig, {
+        project.tasks.register('generateConfig', GenerateConfig) {
             destFile = project.layout.buildDirectory.file('generated.config')
         }
 
@@ -142,7 +142,7 @@ class ComponentPlugin implements Plugin<Project> {
             dependsOn project.tasks.named('generateSource')
         }
 
-        project.tasks.register 'integrationTest', Test, {
+        project.tasks.register('integrationTest', Test) {
             group 'Verification'
             description 'Runs the integration tests.'
             workingDir = project.buildDir
@@ -160,7 +160,7 @@ class ComponentPlugin implements Plugin<Project> {
             }
         }
 
-        project.tasks.register 'testReports', TestReport, {
+        project.tasks.register('testReports', TestReport) {
             testResults.from project.tasks.withType(Test).collect { it.binaryResultsDirectory }
             destinationDirectory = project.file("$project.testReportDir/all")
         }
