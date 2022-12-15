@@ -67,25 +67,25 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.tasks.register('generateServiceLoader', GenerateServiceLoader) {
             group = 'MaryTTS Component'
-            destFile = project.layout.buildDirectory.file('serviceLoader.txt')
+            destFile.set project.layout.buildDirectory.file('serviceLoader.txt')
         }
 
         def unpackSourceTemplatesTask = project.tasks.register('unpackSourceTemplates', UnpackSourceTemplates) {
             group = 'MaryTTS Component'
-            resourceNames = ['ConfigClass.java']
-            destDir = project.layout.buildDirectory.dir('unpackedSrcTemplates')
+            resourceNames.add 'ConfigClass.java'
+            destDir.set project.layout.buildDirectory.dir('unpackedSrcTemplates')
         }
 
         def unpackTestSourceTemplatesTask = project.tasks.register('unpackTestSourceTemplates', UnpackSourceTemplates) {
             group = 'MaryTTS Component'
-            resourceNames = ['ConfigTest.groovy']
-            destDir = project.layout.buildDirectory.dir('unpackedTestSrcTemplates')
+            resourceNames.add 'ConfigTest.groovy'
+            destDir.set project.layout.buildDirectory.dir('unpackedTestSrcTemplates')
         }
 
         def unpackIntegrationTestSourceTemplatesTask = project.tasks.register('unpackIntegrationTestSourceTemplates', UnpackSourceTemplates) {
             group = 'MaryTTS Component'
-            resourceNames = ['IntegrationTest.groovy']
-            destDir = project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
+            resourceNames.add 'IntegrationTest.groovy'
+            destDir.set project.layout.buildDirectory.dir('unpackedIntegrationTestSrcTemplates')
         }
 
         def generateSourceTask = project.tasks.register('generateSource', Copy) {
@@ -126,7 +126,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.tasks.register('generateConfig', GenerateConfig) {
             group = 'MaryTTS Component'
-            destFile = project.layout.buildDirectory.file('generated.config')
+            destFile.set project.layout.buildDirectory.file('generated.config')
         }
 
         project.sourceSets {
@@ -152,7 +152,7 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.tasks.register('integrationTest', Test) {
             group = 'Verification'
-            description 'Runs the integration tests.'
+            description = 'Runs the integration tests.'
             workingDir = project.buildDir
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
             classpath = project.sourceSets.integrationTest.runtimeClasspath
@@ -161,7 +161,7 @@ class ComponentPlugin implements Plugin<Project> {
             shouldRunAfter project.tasks.named('test')
         }
 
-        project.tasks.withType(Test) {
+        project.tasks.withType(Test).configureEach {
             useTestNG()
             testLogging {
                 exceptionFormat = 'full'
