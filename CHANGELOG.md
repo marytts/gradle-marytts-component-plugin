@@ -4,6 +4,10 @@ Gradle MaryTTS Component Plugin
 [Unreleased]
 ------------
 
+### Added
+
+- Group to all tasks
+
 ### Changed
 
 - [all changes since v0.3.0]
