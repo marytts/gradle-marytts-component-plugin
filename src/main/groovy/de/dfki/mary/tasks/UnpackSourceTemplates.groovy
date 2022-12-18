@@ -18,7 +18,9 @@ class UnpackSourceTemplates extends DefaultTask {
     void unpack() {
         resourceNames.get().each { resourceName ->
             destDir.file(resourceName).get().asFile.withWriter {
-                it << this.class.getResourceAsStream(resourceName)
+                def resource = this.class.getResourceAsStream(resourceName)
+                assert resource: "Source template $resourceName could not be found for unpacking"
+                it << resource
             }
         }
     }

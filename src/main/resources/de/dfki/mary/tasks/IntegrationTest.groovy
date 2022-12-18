@@ -29,6 +29,8 @@ ${project.marytts.component.config.collect { key, value ->
     public void canGetProperty(name, expected) {
         def actual
         switch (name) {
+            case 'name':
+                break
             case ~/.+\\.list\$/:
                 actual = MaryProperties.getList(name)
                 assert actual.containsAll(expected)
