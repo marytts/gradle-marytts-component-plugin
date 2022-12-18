@@ -8,6 +8,11 @@ Gradle MaryTTS Component Plugin
 
 - Group to all tasks
 
+### Fixed
+
+- Downstream failures when wrong template unpacking configuration produced `null` source files
+- Failures in generated integration tests, when non-namespaced `name` property is loaded from other MaryConfigs
+
 ### Changed
 
 - [all changes since v0.3.0]
