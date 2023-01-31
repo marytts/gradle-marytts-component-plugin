@@ -1,9 +1,1 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-    plugins {
-        id 'com.gradle.plugin-publish' version '0.21.0'
-    }
-}
 rootProject.name = 'gradle-marytts-component-plugin'
