@@ -62,7 +62,7 @@ class ComponentPlugin implements Plugin<Project> {
                 exclude group: 'gov.nist.math', module: 'Jampack'
             }
             testImplementation localGroovy()
-            testImplementation group: 'org.testng', name: 'testng', version: '7.5'
+            testImplementation group: 'org.testng', name: 'testng', version: '7.5.1'
         }
 
         project.tasks.register('generateServiceLoader', GenerateServiceLoader) {
