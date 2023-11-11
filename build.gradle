@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    api group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+    api group: 'org.yaml', name: 'snakeyaml', version: '2.2'
     testImplementation group: 'org.testng', name: 'testng', version: '7.5.1'
 }
 
