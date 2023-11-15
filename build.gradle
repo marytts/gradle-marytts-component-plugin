@@ -70,7 +70,7 @@ jacocoTestReport {
 
 publishing {
     publications {
-        withType(MavenPublication) {
+        withType(MavenPublication).configureEach {
             pom {
                 name = 'MaryTTS Component Plugin'
                 description = project.description
@@ -114,6 +114,6 @@ publishing {
     }
 }
 
-tasks.withType(Sign) {
+tasks.withType(Sign).configureEach {
     onlyIf { isReleaseVersion }
 }
