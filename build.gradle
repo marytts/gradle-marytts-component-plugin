@@ -10,20 +10,17 @@ version '0.4.0-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
 ext.isReleaseVersion = !version.endsWith('-SNAPSHOT')
 
-pluginBundle {
+gradlePlugin {
     def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
     website = url
     vcsUrl = url
-    description = project.description
-    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
-}
-
-gradlePlugin {
     plugins {
         componentPlugin {
             id = 'de.dfki.mary.component'
             implementationClass = 'de.dfki.mary.ComponentPlugin'
             displayName = 'Gradle MaryTTS Component Plugin'
+            description = project.description
+            tags.set(['marytts', 'text-to-speech', 'tts', 'speech synthesis'])
         }
     }
 }
