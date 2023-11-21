@@ -6,6 +6,10 @@ Gradle MaryTTS Component Plugin
 
 ### Changed
 
+- Build with Gradle v7.6.3
+- Upgraded GitHub actions
+- Upgraded dependencies
+- Upgraded plugins
 - [all changes since v0.3.1]
 
 [v0.3.1] - 2023-01-22
