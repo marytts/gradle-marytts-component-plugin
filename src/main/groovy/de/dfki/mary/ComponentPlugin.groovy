@@ -32,7 +32,7 @@ class ComponentPlugin implements Plugin<Project> {
                 forRepository {
                     maven {
                         name 'DFKI-MLT'
-                        url 'https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local'
+                        url 'https://raw.githubusercontent.com/DFKI-MLT/Maven-Repository/main'
                     }
                 }
                 filter {
