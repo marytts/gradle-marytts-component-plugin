@@ -4,8 +4,16 @@ Gradle MaryTTS Component Plugin
 [Unreleased]
 ------------
 
+### Fixed
+
+- Replaced dead repo for JTok dependency
+
 ### Changed
 
+- Build with Gradle v7.6.4
+- Upgraded GitHub actions
+- Upgraded dependencies
+- Upgraded plugins
 - [all changes since v0.3.1]
 
 [v0.3.1] - 2023-01-22

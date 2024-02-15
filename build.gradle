@@ -1,5 +1,5 @@
 plugins {
-    id 'com.gradle.plugin-publish' version '1.1.0'
+    id 'com.gradle.plugin-publish' version '1.2.1'
     id 'groovy'
     id 'jacoco'
     id 'signing'
@@ -10,20 +10,17 @@ version '0.4.0-SNAPSHOT'
 description 'Utility plugin to build MaryTTS components with Gradle'
 ext.isReleaseVersion = !version.endsWith('-SNAPSHOT')
 
-pluginBundle {
+gradlePlugin {
     def url = 'https://github.com/marytts/gradle-marytts-component-plugin'
     website = url
     vcsUrl = url
-    description = project.description
-    tags = ['marytts', 'text-to-speech', 'tts', 'speech synthesis']
-}
-
-gradlePlugin {
     plugins {
         componentPlugin {
             id = 'de.dfki.mary.component'
             implementationClass = 'de.dfki.mary.ComponentPlugin'
             displayName = 'Gradle MaryTTS Component Plugin'
+            description = project.description
+            tags.set(['marytts', 'text-to-speech', 'tts', 'speech synthesis'])
         }
     }
 }
@@ -33,8 +30,8 @@ repositories {
 }
 
 dependencies {
-    api group: 'org.yaml', name: 'snakeyaml', version: '1.33'
-    testImplementation group: 'org.testng', name: 'testng', version: '7.5'
+    api group: 'org.yaml', name: 'snakeyaml', version: '2.2'
+    testImplementation group: 'org.testng', name: 'testng', version: '7.5.1'
 }
 
 java {
@@ -70,7 +67,7 @@ jacocoTestReport {
 
 publishing {
     publications {
-        withType(MavenPublication) {
+        withType(MavenPublication).configureEach {
             pom {
                 name = 'MaryTTS Component Plugin'
                 description = project.description
@@ -114,6 +111,6 @@ publishing {
     }
 }
 
-tasks.withType(Sign) {
+tasks.withType(Sign).configureEach {
     onlyIf { isReleaseVersion }
 }
