@@ -6,6 +6,7 @@ Gradle MaryTTS Component Plugin
 
 ### Changed
 
+- Upgraded JTok to v1.9.4, resolving it from Maven Central
 - [all changes since v0.3.2]
 
 [v0.3.2] - 2024-02-16
