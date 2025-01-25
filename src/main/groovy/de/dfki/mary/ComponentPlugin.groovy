@@ -28,17 +28,6 @@ class ComponentPlugin implements Plugin<Project> {
 
         project.repositories {
             mavenCentral()
-            exclusiveContent {
-                forRepository {
-                    maven {
-                        name 'DFKI-MLT'
-                        url 'https://raw.githubusercontent.com/DFKI-MLT/Maven-Repository/main'
-                    }
-                }
-                filter {
-                    includeGroup 'de.dfki.lt.jtok'
-                }
-            }
         }
 
         project.sourceSets {
@@ -63,6 +52,11 @@ class ComponentPlugin implements Plugin<Project> {
             }
             testImplementation localGroovy()
             testImplementation group: 'org.testng', name: 'testng', version: '7.5.1'
+            constraints {
+                implementation('de.dfki.lt.jtok:jtok-core:1.9.4') {
+                    because 'transitive dependency v1.9.3 is not available in Maven Central'
+                }
+            }
         }
 
         project.tasks.register('generateServiceLoader', GenerateServiceLoader) {
